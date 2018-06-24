@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+set -u
+
+cd "$(dirname "${0}")/../"
+
+# SDL2
+brew install sdl2{,_image,_mixer,_ttf,_gfx} pkg-config
+go get -v github.com/veandco/go-sdl2/{sdl,img,mix,ttf}
+
