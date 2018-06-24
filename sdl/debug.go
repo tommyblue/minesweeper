@@ -32,7 +32,7 @@ func debugFPS() {
 
 func drawFPS(text string) error {
 	fontColor := sdl.Color{R: 0, G: 0, B: 0, A: 0}
-	textSurface, err := font.RenderUTF8Blended(fmt.Sprintf("%s FPS", text), fontColor)
+	textSurface, err := defaultFont.RenderUTF8Blended(fmt.Sprintf("%s FPS", text), fontColor)
 	if err != nil {
 		return err
 	}

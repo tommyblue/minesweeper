@@ -6,7 +6,8 @@ import (
 	"github.com/veandco/go-sdl2/ttf"
 )
 
-var font *ttf.Font
+var fonts map[string]*ttf.Font
+var defaultFont *ttf.Font
 
 // FPS are the frame per seconds target
 const FPS = 60

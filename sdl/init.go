@@ -13,18 +13,28 @@ func (ui *sdlWrapper) initSdl() error {
 }
 
 func (ui *sdlWrapper) initFonts() error {
+	fonts = make(map[string]*ttf.Font)
 	// Initialize TTF
 	ttf.Init()
-	var err error
-	filepath := utils.GetRelativePath(ui.fontPath)
-	font, err = ttf.OpenFont(filepath, 14)
-	return err
+	for fontName, fontConf := range ui.conf.Fonts {
+		filepath := utils.GetRelativePath(fontConf.Path)
+		font, err := ttf.OpenFont(filepath, fontConf.Size)
+		if err != nil {
+			return err
+		}
+		fonts[fontName] = font
+		if defaultFont == nil {
+			defaultFont = font
+		}
+
+	}
+	return nil
 }
 
 func (ui *sdlWrapper) initWindow() error {
 	var err error
 	ui.window, err = sdl.CreateWindow(
-		ui.title,
+		ui.conf.Title,
 		sdl.WINDOWPOS_UNDEFINED,
 		sdl.WINDOWPOS_UNDEFINED,
 		800,

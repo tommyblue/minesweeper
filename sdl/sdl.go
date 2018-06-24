@@ -6,10 +6,17 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-type sdlWrapper struct {
-	title    string
-	fontPath string
+type FontConfig struct {
+	Path string
+	Size int
+}
+type SdlConf struct {
+	Title string
+	Fonts map[string]FontConfig
+}
 
+type sdlWrapper struct {
+	conf     *SdlConf
 	window   *sdl.Window
 	renderer *sdl.Renderer
 
@@ -21,11 +28,8 @@ type sdlWrapper struct {
 var ui *sdlWrapper
 
 // Init UI components
-func InitSdl(title, fontPath string) error {
-	ui = &sdlWrapper{
-		title:    title,
-		fontPath: fontPath,
-	}
+func InitSdl(c *SdlConf) error {
+	ui = &sdlWrapper{conf: c}
 
 	err := ui.initSdl()
 	if err != nil {

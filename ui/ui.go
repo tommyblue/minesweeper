@@ -9,7 +9,16 @@ type UI struct {
 }
 
 func Initialize() *UI {
-	sdl.InitSdl("Minesweeper", "../assets/fonts/mono.ttf")
+	sdlConf := &sdl.SdlConf{
+		Title: "Minesweeper",
+		Fonts: map[string]sdl.FontConfig{
+			"mono": {
+				Path: "../assets/fonts/mono.ttf",
+				Size: 14,
+			},
+		},
+	}
+	sdl.InitSdl(sdlConf)
 	ui := &UI{}
 	initInput(ui)
 	return ui
