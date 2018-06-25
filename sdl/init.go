@@ -51,7 +51,7 @@ func (ui *sdlWrapper) initRenderer() error {
 		return err
 	}
 
-	err = ui.renderer.SetDrawColor(0, 255, 0, 255)
+	err = ui.renderer.SetDrawColor(0, 0, 0, 255)
 	if err != nil {
 		return err
 	}

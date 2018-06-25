@@ -6,6 +6,8 @@ import (
 	"github.com/veandco/go-sdl2/ttf"
 )
 
+var ui *sdlWrapper
+
 var fonts map[string]*ttf.Font
 var defaultFont *ttf.Font
 

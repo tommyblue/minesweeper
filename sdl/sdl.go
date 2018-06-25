@@ -1,34 +1,5 @@
 package sdl
 
-import (
-	"time"
-
-	"github.com/veandco/go-sdl2/sdl"
-)
-
-type FontConfig struct {
-	Path string
-	Size int
-}
-type SdlConf struct {
-	Title string
-	Fonts map[string]FontConfig
-	Debug bool
-}
-
-type sdlWrapper struct {
-	conf     *SdlConf
-	window   *sdl.Window
-	renderer *sdl.Renderer
-
-	countedFrames uint32
-	timer         time.Time
-	previousTimer time.Time
-}
-
-var ui *sdlWrapper
-
-// Init UI components
 func InitSdl(c *SdlConf) error {
 	ui = &sdlWrapper{conf: c}
 
@@ -76,21 +47,13 @@ func Draw() {
 	ui.countedFrames++
 
 	ui.renderer.Present()
-	ui.renderer.SetDrawColor(167, 125, 83, 255)
-	ui.renderer.Clear()
-}
-
-func (ui *sdlWrapper) syncFPS() {
-	// Reset timers
-	ui.previousTimer = ui.timer
-	ui.timer = time.Now()
-
-	tick := time.Now()
-	elapsedMS := float64(tick.Sub(ui.timer)) / float64(time.Millisecond)
-	if sleep := TICKSPERFRAME - elapsedMS; sleep > 0 {
-		d := time.Duration(sleep)
-		sdl.Delay(uint32(d))
+	if ui.conf.BackgroundColor != nil {
+		ui.renderer.SetDrawColor(
+			ui.conf.BackgroundColor[0],
+			ui.conf.BackgroundColor[1],
+			ui.conf.BackgroundColor[2],
+			ui.conf.BackgroundColor[3],
+		)
 	}
-
-	debugFPS()
+	ui.renderer.Clear()
 }

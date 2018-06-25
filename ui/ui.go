@@ -20,6 +20,7 @@ func Initialize() *UI {
 				Size: 14,
 			},
 		},
+		BackgroundColor: &[4]uint8{255, 255, 255, 255},
 	}
 	sdl.InitSdl(sdlConf)
 	ui := &UI{}
