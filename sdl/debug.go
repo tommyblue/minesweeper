@@ -10,7 +10,7 @@ import (
 )
 
 func debugFPS() {
-	if os.Getenv("DEBUG") == "1" {
+	if ui.conf.Debug {
 		var zeroTime time.Time
 		if lastTimestamp == zeroTime {
 			lastTimestamp = time.Now()

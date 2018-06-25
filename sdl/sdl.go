@@ -13,6 +13,7 @@ type FontConfig struct {
 type SdlConf struct {
 	Title string
 	Fonts map[string]FontConfig
+	Debug bool
 }
 
 type sdlWrapper struct {

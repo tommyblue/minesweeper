@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"os"
+
 	"github.com/tommyblue/minesweeper/sdl"
 )
 
@@ -10,6 +12,7 @@ type UI struct {
 
 func Initialize() *UI {
 	sdlConf := &sdl.SdlConf{
+		Debug: (os.Getenv("DEBUG") == "1"),
 		Title: "Minesweeper",
 		Fonts: map[string]sdl.FontConfig{
 			"mono": {
