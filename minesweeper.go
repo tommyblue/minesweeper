@@ -1,5 +1,7 @@
 package minesweeper
 
+import "os"
+
 type Tile int
 
 const (
@@ -40,4 +42,8 @@ type UI interface {
 	ShouldRun() bool
 	StartRunning()
 	StopRunning()
+}
+
+func IsDebug() bool {
+	return os.Getenv("DEBUG") == "1"
 }

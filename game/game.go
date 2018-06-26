@@ -22,8 +22,9 @@ func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
 	game.setInitialState()
 
 	game.setMines()
-	printTiles(game.Board.Tiles)
-
+	if minesweeper.IsDebug() {
+		printTiles(game.Board.Tiles)
+	}
 	return game
 }
 

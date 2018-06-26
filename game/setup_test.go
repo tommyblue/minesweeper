@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/tommyblue/minesweeper"
-	"github.com/tommyblue/minesweeper/ui"
 )
 
 func TestGame_updateNumbersAroundMine(t *testing.T) {
@@ -18,11 +17,9 @@ func TestGame_updateNumbersAroundMine(t *testing.T) {
 		Mines: 5,
 	}
 
-	ui := ui.Initialize()
-
 	g := &Game{
 		Board: board,
-		UI:    ui,
+		UI:    nil,
 	}
 
 	expected1 := [][]minesweeper.Tile{
@@ -115,43 +112,53 @@ func TestGame_updateNumbersAroundMine(t *testing.T) {
 func TestGame_setMines(t *testing.T) {
 	rand.Seed(time.Now().Unix())
 
-	board := &minesweeper.Board{
-		Cols:  4,
-		Rows:  6,
-		Mines: 5,
+	boards := []minesweeper.Board{
+		{Cols: 4, Rows: 4, Mines: 5},
+		{Cols: 10, Rows: 10, Mines: 10},
+		{Cols: 10, Rows: 10, Mines: 100},
+		{Cols: 20, Rows: 15, Mines: 80},
+		{Cols: 25, Rows: 30, Mines: 250},
+		{Cols: 40, Rows: 40, Mines: 600},
 	}
 
-	ui := ui.Initialize()
+	for _, b := range boards {
+		board := &minesweeper.Board{
+			Cols:  b.Cols,
+			Rows:  b.Cols,
+			Mines: b.Mines,
+		}
 
-	g := &Game{
-		Board: board,
-		UI:    ui,
+		g := &Game{
+			Board: board,
+			UI:    nil,
+		}
+		g.initBoard()
+
+		var x, y int32
+		t.Run("Board should be empty", func(t *testing.T) {
+			for x = 0; x < g.Board.Cols; x++ {
+				for y = 0; y < g.Board.Rows; y++ {
+					if g.Board.Tiles[x][y] != minesweeper.Empty {
+						t.Errorf("Tile should be empty at this point")
+					}
+				}
+			}
+		})
+
+		g.setMines()
+		countedMines := 0
+		t.Run("Board should be populated", func(t *testing.T) {
+			for x = 0; x < g.Board.Cols; x++ {
+				for y = 0; y < g.Board.Rows; y++ {
+					if g.Board.Tiles[x][y] == minesweeper.Mine {
+						countedMines++
+					}
+				}
+			}
+			if countedMines != g.Board.Mines {
+				t.Errorf("I counted %v mines instead of %v", countedMines, g.Board.Mines)
+				printTiles(g.Board.Tiles)
+			}
+		})
 	}
-	g.initBoard()
-
-	var x, y int32
-	t.Run("Board should be empty", func(t *testing.T) {
-		for x = 0; x < g.Board.Cols; x++ {
-			for y = 0; y < g.Board.Rows; y++ {
-				if g.Board.Tiles[x][y] != minesweeper.Empty {
-					t.Errorf("Tile should be empty at this point")
-				}
-			}
-		}
-	})
-
-	g.setMines()
-	countedMines := 0
-	t.Run("Board should be populated", func(t *testing.T) {
-		for x = 0; x < g.Board.Cols; x++ {
-			for y = 0; y < g.Board.Rows; y++ {
-				if g.Board.Tiles[x][y] == minesweeper.Mine {
-					countedMines++
-				}
-			}
-		}
-		if countedMines != g.Board.Mines {
-			t.Errorf("I counted %v mines instead of %v", countedMines, g.Board.Mines)
-		}
-	})
 }

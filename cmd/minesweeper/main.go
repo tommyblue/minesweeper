@@ -15,7 +15,7 @@ func main() {
 	board := &minesweeper.Board{
 		Cols:  20,
 		Rows:  20,
-		Mines: 5,
+		Mines: 40,
 	}
 
 	ui := ui.Initialize()
