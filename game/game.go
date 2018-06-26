@@ -13,24 +13,13 @@ type Game struct {
 }
 
 func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
-	// All tiles are still to be discovered
-	initialState := &minesweeper.GameState{
-		DiscoveredTiles: [][]bool{},
-	}
-	initialState.DiscoveredTiles = make([][]bool, board.Cols)
-	var x, y int32
-	for x = 0; x < board.Cols; x++ {
-		initialState.DiscoveredTiles[x] = make([]bool, board.Rows)
-		for y = 0; y < board.Rows; y++ {
-			initialState.DiscoveredTiles[x][y] = false
-		}
-	}
 
 	game := &Game{
 		Board: board,
 		UI:    ui,
-		State: initialState,
 	}
+
+	game.setInitialState()
 
 	game.setMines()
 	printTiles(game.Board.Tiles)
