@@ -6,29 +6,32 @@ import (
 	"github.com/tommyblue/minesweeper"
 )
 
+func (g *Game) initBoard() {
+	g.Board.Tiles = make([][]minesweeper.Tile, g.Board.Cols)
+	var i int32
+	for i = 0; i < g.Board.Cols; i++ {
+		g.Board.Tiles[i] = make([]minesweeper.Tile, g.Board.Rows)
+	}
+}
+
 // put mines randomly
 func (g *Game) setMines() {
-	board := g.Board
-	g.Board.Tiles = make([][]minesweeper.Tile, board.Cols)
-	var i int32
-	for i = 0; i < board.Cols; i++ {
-		g.Board.Tiles[i] = make([]minesweeper.Tile, board.Rows)
-	}
-
-	for i = 0; i < board.Mines; i++ {
-		col := rand.Int31n(board.Cols)
-		row := rand.Int31n(board.Rows)
-		g.Board.Tiles[col][row] = mine
+	g.initBoard()
+	for i := 0; i < g.Board.Mines; i++ {
+		col := rand.Int31n(g.Board.Cols)
+		row := rand.Int31n(g.Board.Rows)
+		g.Board.Tiles[col][row] = minesweeper.Mine
 		g.updateNumbersAroundMine(col, row)
 	}
 }
 
+// update number of mines near tiles
 func (g *Game) updateNumbersAroundMine(col, row int32) {
 	for x := col - 1; x <= col+1; x++ {
 		if x >= 0 && x < g.Board.Cols {
 			for y := row - 1; y <= row+1; y++ {
 				if y >= 0 && y < g.Board.Rows {
-					if g.Board.Tiles[x][y] < mine {
+					if g.Board.Tiles[x][y] < minesweeper.Mine {
 						g.Board.Tiles[x][y]++
 					}
 				}

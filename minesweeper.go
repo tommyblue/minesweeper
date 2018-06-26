@@ -2,10 +2,25 @@ package minesweeper
 
 type Tile int
 
+const (
+	Empty     Tile = 0
+	N1        Tile = 1
+	N2        Tile = 2
+	N3        Tile = 3
+	N4        Tile = 4
+	N5        Tile = 5
+	N6        Tile = 6
+	N7        Tile = 7
+	N8        Tile = 8
+	Mine      Tile = 9
+	Explosion Tile = 10
+	Flag      Tile = 11
+)
+
 type Board struct {
 	Cols  int32
 	Rows  int32
-	Mines int32
+	Mines int
 	Tiles [][]Tile
 }
 
