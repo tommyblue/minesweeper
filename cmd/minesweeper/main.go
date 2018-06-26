@@ -1,16 +1,21 @@
 package main
 
 import (
+	"math/rand"
+	"time"
+
 	"github.com/tommyblue/minesweeper"
 	"github.com/tommyblue/minesweeper/game"
 	"github.com/tommyblue/minesweeper/ui"
 )
 
 func main() {
+	rand.Seed(time.Now().Unix())
+
 	board := &minesweeper.Board{
-		Height: 20,
-		Width:  20,
-		Mines:  5,
+		Cols:  20,
+		Rows:  20,
+		Mines: 5,
 	}
 
 	ui := ui.Initialize()

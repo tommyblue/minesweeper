@@ -1,9 +1,16 @@
 package minesweeper
 
+type Tile int
+
 type Board struct {
-	Height int
-	Width  int
-	Mines  int
+	Cols  int32
+	Rows  int32
+	Mines int32
+	Tiles [][]Tile
+}
+
+type GameState struct {
+	DiscoveredTiles [][]bool
 }
 
 type Game interface {
@@ -13,7 +20,7 @@ type Game interface {
 }
 
 type UI interface {
-	Draw()
+	Draw(*Board)
 	ManageInput()
 	ShouldRun() bool
 	StartRunning()
