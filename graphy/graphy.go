@@ -48,7 +48,11 @@ func Close() error {
 	return nil
 }
 
-func Draw() {
+func Draw(matrix *Matrix) {
+	for _, tile := range *matrix.Tiles {
+		ui.drawImage(tile)
+	}
+
 	ui.syncFPS()
 	ui.countedFrames++
 

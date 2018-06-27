@@ -56,3 +56,21 @@ func (ui *sdlWrapper) warmCache() error {
 	}
 	return nil
 }
+
+func (ui *sdlWrapper) drawImage(tile Tile) error {
+	imageStruct := ui.getImageFromCache(tile.ImageID)
+	x := imageStruct.rect.W * tile.PosX
+	y := imageStruct.rect.H * tile.PosY
+
+	dst := sdl.Rect{X: x, Y: y, W: imageStruct.rect.W, H: imageStruct.rect.H}
+	err := ui.renderer.Copy(imageStruct.image, &imageStruct.rect, &dst)
+	return err
+}
+
+func (ui *sdlWrapper) getImage(imageID string) imageStruct {
+	return ui.getImageFromCache(imageID)
+}
+
+func (ui *sdlWrapper) getImageFromCache(imageID string) imageStruct {
+	return (*ui.cache)[imageID]
+}

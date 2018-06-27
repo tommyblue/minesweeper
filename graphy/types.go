@@ -35,3 +35,13 @@ type sdlWrapper struct {
 	timer         time.Time
 	previousTimer time.Time
 }
+
+type Tile struct {
+	ImageID string
+	PosX    int32
+	PosY    int32
+}
+
+type Matrix struct {
+	Tiles *[]Tile
+}

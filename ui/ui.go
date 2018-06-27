@@ -26,9 +26,6 @@ func Initialize() *UI {
 	ui := &UI{}
 	initInput(ui)
 
-	/* TODO:
-	- preload images
-	*/
 	return ui
 }
 
