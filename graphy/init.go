@@ -1,9 +1,8 @@
-package sdl
+package graphy
 
 import (
 	"time"
 
-	"github.com/tommyblue/sokoban/utils"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -17,7 +16,7 @@ func (ui *sdlWrapper) initFonts() error {
 	// Initialize TTF
 	ttf.Init()
 	for fontName, fontConf := range ui.conf.Fonts {
-		filepath := utils.GetRelativePath(fontConf.Path)
+		filepath := getRelativePath(fontConf.Path)
 		font, err := ttf.OpenFont(filepath, fontConf.Size)
 		if err != nil {
 			return err

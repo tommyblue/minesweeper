@@ -17,6 +17,7 @@ const (
 	Mine      Tile = 9
 	Explosion Tile = 10
 	Flag      Tile = 11
+	Unknown   Tile = 12
 )
 
 type Board struct {

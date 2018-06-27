@@ -45,9 +45,3 @@ func (g *Game) Exit() {
 func (g *Game) Quit() {
 	g.UI.StopRunning()
 }
-
-func printTiles(tiles [][]minesweeper.Tile) {
-	for _, x := range tiles {
-		fmt.Printf("%v\n", x)
-	}
-}

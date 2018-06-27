@@ -1,6 +1,6 @@
-package sdl
+package graphy
 
-func InitSdl(c *SdlConf) error {
+func InitGraphy(c *GraphyConf) error {
 	ui = &sdlWrapper{conf: c}
 
 	err := ui.initSdl()
@@ -24,6 +24,12 @@ func InitSdl(c *SdlConf) error {
 	}
 
 	err = ui.initTimers()
+	if err != nil {
+		return err
+	}
+
+	err = ui.warmCache()
+
 	return err
 }
 

@@ -2,9 +2,9 @@ package ui
 
 import (
 	"github.com/tommyblue/minesweeper"
-	"github.com/tommyblue/minesweeper/sdl"
+	"github.com/tommyblue/minesweeper/graphy"
 )
 
 func (ui *UI) Draw(*minesweeper.Board) {
-	sdl.Draw()
+	graphy.Draw()
 }

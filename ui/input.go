@@ -1,24 +1,24 @@
 package ui
 
-import "github.com/tommyblue/minesweeper/sdl"
+import "github.com/tommyblue/minesweeper/graphy"
 
-type sdlInputInterface struct {
+type graphyInputInterface struct {
 	quitFn func()
 }
 
-var input *sdlInputInterface
+var input *graphyInputInterface
 
 func (ui *UI) ManageInput() {
-	sdl.ManageInput(input)
+	graphy.ManageInput(input)
 }
 
-func (i *sdlInputInterface) Quit() {
+func (i *graphyInputInterface) Quit() {
 	i.quitFn()
 }
 
 func initInput(ui *UI) {
 	if input == nil {
-		input = &sdlInputInterface{
+		input = &graphyInputInterface{
 			quitFn: ui.StopRunning,
 		}
 	}

@@ -1,4 +1,4 @@
-package sdl
+package graphy
 
 import (
 	"time"
@@ -10,15 +10,24 @@ type FontConfig struct {
 	Path string
 	Size int
 }
-type SdlConf struct {
+
+type GraphyConf struct {
 	Title           string
 	Fonts           map[string]FontConfig
 	Debug           bool
 	BackgroundColor *[4]uint8
+	ImagesToCache   *map[string]string
+}
+
+type imageStruct struct {
+	id    string
+	image *sdl.Texture
+	rect  sdl.Rect
 }
 
 type sdlWrapper struct {
-	conf     *SdlConf
+	cache    *map[string]imageStruct
+	conf     *GraphyConf
 	window   *sdl.Window
 	renderer *sdl.Renderer
 

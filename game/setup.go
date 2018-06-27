@@ -17,14 +17,14 @@ func (g *Game) initBoard() {
 // put mines randomly
 func (g *Game) setMines() {
 	g.initBoard()
-	minesToSet := g.Board.Mines
-	for minesToSet > 0 {
+	minesToBePlaced := g.Board.Mines
+	for minesToBePlaced > 0 {
 		col := rand.Int31n(g.Board.Cols)
 		row := rand.Int31n(g.Board.Rows)
 		if g.Board.Tiles[col][row] != minesweeper.Mine {
 			g.Board.Tiles[col][row] = minesweeper.Mine
 			g.updateNumbersAroundMine(col, row)
-			minesToSet--
+			minesToBePlaced--
 		}
 	}
 }

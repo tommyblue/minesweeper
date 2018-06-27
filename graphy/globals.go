@@ -1,4 +1,4 @@
-package sdl
+package graphy
 
 import (
 	"time"

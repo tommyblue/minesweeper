@@ -1,4 +1,4 @@
-package sdl
+package graphy
 
 import "github.com/veandco/go-sdl2/sdl"
 

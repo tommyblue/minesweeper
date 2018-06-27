@@ -2,7 +2,7 @@ package ui
 
 import (
 	"github.com/tommyblue/minesweeper"
-	"github.com/tommyblue/minesweeper/sdl"
+	"github.com/tommyblue/minesweeper/graphy"
 )
 
 type UI struct {
@@ -10,20 +10,25 @@ type UI struct {
 }
 
 func Initialize() *UI {
-	sdlConf := &sdl.SdlConf{
+	graphyConf := &graphy.GraphyConf{
 		Debug: minesweeper.IsDebug(),
 		Title: "Minesweeper",
-		Fonts: map[string]sdl.FontConfig{
+		Fonts: map[string]graphy.FontConfig{
 			"mono": {
 				Path: "../assets/fonts/mono.ttf",
 				Size: 14,
 			},
 		},
 		BackgroundColor: &[4]uint8{255, 255, 255, 255},
+		ImagesToCache:   getImagesToCache(),
 	}
-	sdl.InitSdl(sdlConf)
+	graphy.InitGraphy(graphyConf)
 	ui := &UI{}
 	initInput(ui)
+
+	/* TODO:
+	- preload images
+	*/
 	return ui
 }
 
