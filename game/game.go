@@ -7,9 +7,10 @@ import (
 )
 
 type Game struct {
-	Board *minesweeper.Board
-	State *minesweeper.GameState
-	UI    minesweeper.UI
+	Board       *minesweeper.Board
+	State       *minesweeper.GameState
+	MaskedBoard *minesweeper.Board
+	UI          minesweeper.UI
 }
 
 func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
@@ -34,7 +35,7 @@ func (g *Game) Start() {
 	g.UI.StartRunning()
 	for g.UI.ShouldRun() {
 		g.UI.ManageInput()
-		g.UI.Draw(g.Board)
+		g.UI.Draw(g.MaskedBoard)
 	}
 }
 
