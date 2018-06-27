@@ -5,8 +5,7 @@ import (
 	"runtime"
 )
 
-// return path to the file relative to the caller package
-func getRelativePath(filepath string) string {
+func getAbsolutePath(filepath string) string {
 	_, filename, _, ok := runtime.Caller(1)
 	if !ok {
 		panic("error")

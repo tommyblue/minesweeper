@@ -7,9 +7,6 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
-// TODO: get from image
-var imageSide int32 = 24
-
 func (ui *sdlWrapper) warmCache() error {
 	if ui.cache == nil {
 		cache := make(map[string]imageStruct)
@@ -17,11 +14,21 @@ func (ui *sdlWrapper) warmCache() error {
 	}
 
 	for imageID, imagePath := range *ui.conf.ImagesToCache {
-		fmt.Printf("Caching image ID \"%s\"\n", imageID)
+		if ui.conf.Debug {
+			fmt.Printf("Caching image ID \"%s\"\n  File path: %s\n", imageID, imagePath)
+		}
+		image, err := img.Load(imagePath)
+		if err != nil {
+			return err
+		}
+
+		if ui.conf.Debug {
+			fmt.Printf("  Image size: %dx%d\n", image.W, image.H)
+		}
 		surface, err := sdl.CreateRGBSurface(
 			0,
-			imageSide,
-			imageSide,
+			image.W,
+			image.H,
 			32,
 			0xff000000,
 			0x00ff0000,
@@ -33,12 +40,7 @@ func (ui *sdlWrapper) warmCache() error {
 			return err
 		}
 
-		srcRect := sdl.Rect{X: 0, Y: 0, W: imageSide, H: imageSide}
-
-		image, err := img.Load(imagePath)
-		if err != nil {
-			return err
-		}
+		srcRect := sdl.Rect{X: 0, Y: 0, W: image.W, H: image.H}
 
 		err = image.Blit(&srcRect, surface, &srcRect)
 		if err != nil {

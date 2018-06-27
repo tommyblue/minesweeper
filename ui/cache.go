@@ -8,7 +8,7 @@ import (
 func getImagesToCache() *map[string]string {
 	ret := make(map[string]string)
 	for _, v := range tileImages {
-		ret[string(v)] = getRelativePath(fmt.Sprintf("../assets/images/%s.png", v))
+		ret[string(v)] = getAbsolutePath(fmt.Sprintf("../assets/images/%s.png", v))
 	}
 	return &ret
 }

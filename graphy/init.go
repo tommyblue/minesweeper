@@ -16,7 +16,7 @@ func (ui *sdlWrapper) initFonts() error {
 	// Initialize TTF
 	ttf.Init()
 	for fontName, fontConf := range ui.conf.Fonts {
-		filepath := getRelativePath(fontConf.Path)
+		filepath := getAbsolutePath(fontConf.Path)
 		font, err := ttf.OpenFont(filepath, fontConf.Size)
 		if err != nil {
 			return err
