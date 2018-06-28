@@ -5,22 +5,7 @@ import (
 	"github.com/tommyblue/minesweeper/graphy"
 )
 
-type tile struct {
-	x int32
-	y int32
-}
-
-type event struct {
-	evType string
-	tile   *tile
-}
-
-type UI struct {
-	isRunning bool
-	tileSize  int32
-	event     *event
-}
-
+// Initialize the ui
 func Initialize(tileSize int32) *UI {
 	graphyConf := &graphy.GraphyConf{
 		Debug: minesweeper.IsDebug(),
@@ -41,10 +26,12 @@ func Initialize(tileSize int32) *UI {
 	return ui
 }
 
+// ShouldRun checks whether the game loop should be running
 func (ui *UI) ShouldRun() bool {
 	return ui.isRunning
 }
 
+// StartRunning starts the game loop
 func (ui *UI) StartRunning() {
 	ui.isRunning = true
 }

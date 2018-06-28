@@ -39,9 +39,9 @@ type Game interface {
 type UI interface {
 	Draw(*Board)
 	ManageInput()
+	UpdateState(func(x, y int32))
 	ShouldRun() bool
 	StartRunning()
-	StopRunning()
 }
 
 func IsDebug() bool {

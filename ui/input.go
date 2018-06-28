@@ -51,7 +51,7 @@ func (ui *UI) mouseClickAt(x, y int32) {
 	tileX := int32(math.Floor(float64(x) / float64(ui.tileSize)))
 	tileY := int32(math.Floor(float64(y) / float64(ui.tileSize)))
 	ui.event = &event{
-		evType: "mouseLeftClick",
+		evType: mouseLeftClick,
 		tile: &tile{
 			x: tileX,
 			y: tileY,

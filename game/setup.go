@@ -45,33 +45,48 @@ func (g *Game) updateNumbersAroundMine(col, row int32) {
 }
 
 func (g *Game) setInitialState() {
-	var x, y int32
-
-	maskedBoard := minesweeper.Board{
-		Cols:  g.Board.Cols,
-		Rows:  g.Board.Rows,
-		Mines: g.Board.Mines,
-		Tiles: [][]minesweeper.Tile{},
-	}
-
-	maskedBoard.Tiles = make([][]minesweeper.Tile, g.Board.Cols)
-	for x = 0; x < maskedBoard.Cols; x++ {
-		maskedBoard.Tiles[x] = make([]minesweeper.Tile, maskedBoard.Rows)
-		for y = 0; y < maskedBoard.Rows; y++ {
-			maskedBoard.Tiles[x][y] = minesweeper.Unknown
-		}
-	}
-	g.MaskedBoard = &maskedBoard
-
 	// All tiles are still to be discovered
 	g.State = &minesweeper.GameState{
 		DiscoveredTiles: [][]bool{},
 	}
 	g.State.DiscoveredTiles = make([][]bool, g.Board.Cols)
+
+	var x, y int32
 	for x = 0; x < g.Board.Cols; x++ {
 		g.State.DiscoveredTiles[x] = make([]bool, g.Board.Rows)
 		for y = 0; y < g.Board.Rows; y++ {
 			g.State.DiscoveredTiles[x][y] = false
 		}
+	}
+	g.initMaskedBoard()
+	g.updateMaskedBoard()
+}
+
+func (g *Game) updateMaskedBoard() {
+	g.MaskedBoard.Tiles = make([][]minesweeper.Tile, g.Board.Cols)
+
+	var x, y int32
+	for x = 0; x < g.MaskedBoard.Cols; x++ {
+		g.MaskedBoard.Tiles[x] = make([]minesweeper.Tile, g.MaskedBoard.Rows)
+		for y = 0; y < g.MaskedBoard.Rows; y++ {
+			if g.State.DiscoveredTiles[x][y] == false {
+				g.MaskedBoard.Tiles[x][y] = minesweeper.Unknown
+			} else {
+				g.MaskedBoard.Tiles[x][y] = g.Board.Tiles[x][y]
+			}
+		}
+	}
+}
+
+// To be called on initial setup to init the masked board
+func (g *Game) initMaskedBoard() {
+	if g.MaskedBoard == nil {
+		maskedBoard := minesweeper.Board{
+			Cols:  g.Board.Cols,
+			Rows:  g.Board.Rows,
+			Mines: g.Board.Mines,
+			Tiles: [][]minesweeper.Tile{},
+		}
+		g.MaskedBoard = &maskedBoard
 	}
 }
