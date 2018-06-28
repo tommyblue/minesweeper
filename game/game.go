@@ -69,7 +69,11 @@ func (g *Game) leftClickOnTile(x, y int32) {
 
 func (g *Game) rightClickOnTile(x, y int32) {
 	if g.State.DiscoveredTiles[x][y] != true {
-		g.Board.Tiles[x][y] = minesweeper.Flag
+		if g.MaskedBoard.Tiles[x][y] != minesweeper.Flag {
+			g.MaskedBoard.Tiles[x][y] = minesweeper.Flag
+		} else {
+			g.MaskedBoard.Tiles[x][y] = minesweeper.Unknown
+		}
 		g.updateMaskedBoard()
 	}
 }
