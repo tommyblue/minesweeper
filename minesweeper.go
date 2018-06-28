@@ -28,8 +28,19 @@ type Board struct {
 	Tiles [][]Tile
 }
 
+type State int
+
+const (
+	InitialScreen State = iota
+	SelectLevel
+	InAGame
+	Lost
+	Win
+)
+
 type GameState struct {
 	DiscoveredTiles [][]bool
+	CurrentState    State
 }
 
 type Game interface {

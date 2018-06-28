@@ -52,7 +52,7 @@ func Draw(matrix *Matrix) {
 	ui.drawBackground()
 
 	for _, tile := range *matrix.Tiles {
-		ui.drawImage(tile)
+		ui.drawImage(tile, getMatrixOffset(matrix))
 	}
 
 	ui.syncFPS()
@@ -68,4 +68,23 @@ func Draw(matrix *Matrix) {
 		)
 	}
 	ui.renderer.Clear()
+}
+
+/*
+Calculate draw offset of the matrix, currently commented out because mouse events must be
+re-calculated based on offset
+*/
+func getMatrixOffset(matrix *Matrix) *imageOffset {
+	// matrixSide := int32(math.Sqrt(float64(len(*matrix.Tiles))))
+	// matrixWidth := matrixSide * ui.conf.TileSize
+	// xOffset := int32((ui.conf.Window.Width - matrixWidth) / 2)
+	// offset := &imageOffset{
+	// 	x: xOffset,
+	// 	y: 0,
+	// }
+	offset := &imageOffset{
+		x: 0,
+		y: 0,
+	}
+	return offset
 }

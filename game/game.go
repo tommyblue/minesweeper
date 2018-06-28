@@ -53,11 +53,15 @@ func (g *Game) updateState() {
 }
 
 func (g *Game) leftClickOnTile(x, y int32) {
-	if g.State.DiscoveredTiles[x][y] != true && g.MaskedBoard.Tiles[x][y] != minesweeper.Flag {
+	canClick := g.State.CurrentState == minesweeper.InAGame &&
+		g.State.DiscoveredTiles[x][y] != true &&
+		g.MaskedBoard.Tiles[x][y] != minesweeper.Flag
+	if canClick {
 		g.State.DiscoveredTiles[x][y] = true
 		switch g.Board.Tiles[x][y] {
 		case minesweeper.Mine:
-			// boom
+			g.setState(minesweeper.Lost)
+			g.mineExplodedAt(x, y)
 			break
 		case minesweeper.Empty:
 			g.expandEmptyClick(x, y)
@@ -67,8 +71,24 @@ func (g *Game) leftClickOnTile(x, y int32) {
 	}
 }
 
+func (g *Game) mineExplodedAt(x, y int32) {
+	g.Board.Tiles[x][y] = minesweeper.Explosion
+	g.showAllMines()
+}
+
+func (g *Game) showAllMines() {
+	var x, y int32
+	for x = 0; x < g.Board.Cols; x++ {
+		for y = 0; y < g.Board.Rows; y++ {
+			if g.Board.Tiles[x][y] == minesweeper.Mine {
+				g.State.DiscoveredTiles[x][y] = true
+			}
+		}
+	}
+}
+
 func (g *Game) rightClickOnTile(x, y int32) {
-	if g.State.DiscoveredTiles[x][y] != true {
+	if g.State.CurrentState == minesweeper.InAGame && g.State.DiscoveredTiles[x][y] != true {
 		if g.MaskedBoard.Tiles[x][y] != minesweeper.Flag {
 			g.MaskedBoard.Tiles[x][y] = minesweeper.Flag
 		} else {

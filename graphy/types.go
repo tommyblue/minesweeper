@@ -17,6 +17,7 @@ type Window struct {
 }
 
 type GraphyConf struct {
+	TileSize        int32
 	Title           string
 	Fonts           map[string]FontConfig
 	Debug           bool
@@ -30,6 +31,11 @@ type imageStruct struct {
 	id    string
 	image *sdl.Texture
 	rect  sdl.Rect
+}
+
+type imageOffset struct {
+	x int32
+	y int32
 }
 
 type sdlWrapper struct {

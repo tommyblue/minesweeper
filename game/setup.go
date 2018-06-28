@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"math/rand"
 
 	"github.com/tommyblue/minesweeper"
@@ -48,6 +49,7 @@ func (g *Game) setInitialState() {
 	// All tiles are still to be discovered
 	g.State = &minesweeper.GameState{
 		DiscoveredTiles: [][]bool{},
+		CurrentState:    minesweeper.InAGame,
 	}
 	g.State.DiscoveredTiles = make([][]bool, g.Board.Cols)
 
@@ -64,13 +66,21 @@ func (g *Game) setInitialState() {
 
 func (g *Game) updateMaskedBoard() {
 	var x, y int32
+	unmaskedTiles := 0
 	for x = 0; x < g.MaskedBoard.Cols; x++ {
 		for y = 0; y < g.MaskedBoard.Rows; y++ {
 			if g.State.DiscoveredTiles[x][y] == true {
 				g.MaskedBoard.Tiles[x][y] = g.Board.Tiles[x][y]
+			} else {
+				unmaskedTiles++
 			}
 		}
 	}
+	if unmaskedTiles == g.Board.Mines {
+		// Win!
+		fmt.Println("You win!")
+	}
+
 }
 
 // To be called on initial setup to init the masked board
