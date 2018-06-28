@@ -55,16 +55,67 @@ func (g *Game) updateState() {
 func (g *Game) leftClickOnTile(x, y int32) {
 	if g.State.DiscoveredTiles[x][y] != true && g.MaskedBoard.Tiles[x][y] != minesweeper.Flag {
 		g.State.DiscoveredTiles[x][y] = true
-		// TODO:
-		// - if empty tile, expand discovered tiles
-		// - if bomb, boom!
+		switch g.Board.Tiles[x][y] {
+		case minesweeper.Mine:
+			// boom
+			break
+		case minesweeper.Empty:
+			g.expandEmptyClick(x, y)
+			break
+		}
 		g.updateMaskedBoard()
 	}
 }
 
 func (g *Game) rightClickOnTile(x, y int32) {
 	if g.State.DiscoveredTiles[x][y] != true {
-		g.MaskedBoard.Tiles[x][y] = minesweeper.Flag
+		g.Board.Tiles[x][y] = minesweeper.Flag
 		g.updateMaskedBoard()
 	}
+}
+
+func (g *Game) expandEmptyClick(x, y int32) {
+	// look around and make recursive calls
+	fmt.Printf("Expanding to %d, %d\n", x, y)
+
+	for _, coord := range g.getCoordsToExpand(x, y) {
+		newX := coord[0]
+		newY := coord[1]
+		if g.State.DiscoveredTiles[newX][newY] == false {
+			g.State.DiscoveredTiles[newX][newY] = true
+
+			if g.Board.Tiles[newX][newY] == minesweeper.Empty {
+				g.expandEmptyClick(newX, newY)
+			}
+		}
+	}
+}
+
+func (g *Game) getCoordsToExpand(x, y int32) [][2]int32 {
+	coords := [][2]int32{}
+	if x-1 >= 0 {
+		coords = append(coords, [2]int32{x - 1, y})
+	}
+	if y-1 >= 0 {
+		coords = append(coords, [2]int32{x, y - 1})
+	}
+	if x-1 >= 0 && y-1 >= 0 {
+		coords = append(coords, [2]int32{x - 1, y - 1})
+	}
+	if x+1 < g.Board.Cols {
+		coords = append(coords, [2]int32{x + 1, y})
+	}
+	if y+1 < g.Board.Rows {
+		coords = append(coords, [2]int32{x, y + 1})
+	}
+	if x+1 < g.Board.Cols && y+1 < g.Board.Rows {
+		coords = append(coords, [2]int32{x + 1, y + 1})
+	}
+	if x-1 >= 0 && y+1 < g.Board.Rows {
+		coords = append(coords, [2]int32{x - 1, y + 1})
+	}
+	if x+1 < g.Board.Cols && y-1 >= 0 {
+		coords = append(coords, [2]int32{x + 1, y - 1})
+	}
+	return coords
 }
