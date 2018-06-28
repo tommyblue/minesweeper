@@ -4,6 +4,7 @@ import "os"
 
 type Tile int
 
+// Not using a iota to be sure that each number corresponds to the right status
 const (
 	Empty     Tile = 0
 	N1        Tile = 1

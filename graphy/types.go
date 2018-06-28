@@ -11,11 +11,18 @@ type FontConfig struct {
 	Size int
 }
 
+type Window struct {
+	Height int32
+	Width  int32
+}
+
 type GraphyConf struct {
 	Title           string
 	Fonts           map[string]FontConfig
 	Debug           bool
+	Window          *Window
 	BackgroundColor *[4]uint8
+	BackgroundImage string
 	ImagesToCache   *map[string]string
 }
 

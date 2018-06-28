@@ -8,6 +8,11 @@ import (
 // Initialize the ui
 func Initialize(tileSize int32) *UI {
 	graphyConf := &graphy.GraphyConf{
+		TileSize: tileSize,
+		Window: &graphy.Window{
+			Width:  800,
+			Height: 600,
+		},
 		Debug: minesweeper.IsDebug(),
 		Title: "Minesweeper",
 		Fonts: map[string]graphy.FontConfig{
@@ -17,6 +22,7 @@ func Initialize(tileSize int32) *UI {
 			},
 		},
 		BackgroundColor: &[4]uint8{255, 255, 255, 255},
+		BackgroundImage: getAbsolutePath("../assets/images/bg.jpg"),
 		ImagesToCache:   getImagesToCache(),
 	}
 	graphy.InitGraphy(graphyConf)

@@ -36,8 +36,8 @@ func (ui *sdlWrapper) initWindow() error {
 		ui.conf.Title,
 		sdl.WINDOWPOS_UNDEFINED,
 		sdl.WINDOWPOS_UNDEFINED,
-		800,
-		600,
+		ui.conf.Window.Width,
+		ui.conf.Window.Height,
 		sdl.WINDOW_SHOWN,
 	)
 	return err
