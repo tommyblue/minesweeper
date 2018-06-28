@@ -8,6 +8,7 @@ import (
 
 type Input interface {
 	MouseLeftClickDown(x, y int32)
+	MouseRightClickDown(x, y int32)
 	Quit()
 }
 
@@ -23,6 +24,12 @@ func ManageInput(inputInterface Input) {
 						fmt.Printf("Mouse left click at (%d, %d)\n", ev.X, ev.Y)
 					}
 					inputInterface.MouseLeftClickDown(ev.X, ev.Y)
+					break
+				case sdl.BUTTON_RIGHT:
+					if ui.conf.Debug {
+						fmt.Printf("Mouse right click at (%d, %d)\n", ev.X, ev.Y)
+					}
+					inputInterface.MouseRightClickDown(ev.X, ev.Y)
 					break
 				}
 				break

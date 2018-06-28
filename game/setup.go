@@ -63,15 +63,10 @@ func (g *Game) setInitialState() {
 }
 
 func (g *Game) updateMaskedBoard() {
-	g.MaskedBoard.Tiles = make([][]minesweeper.Tile, g.Board.Cols)
-
 	var x, y int32
 	for x = 0; x < g.MaskedBoard.Cols; x++ {
-		g.MaskedBoard.Tiles[x] = make([]minesweeper.Tile, g.MaskedBoard.Rows)
 		for y = 0; y < g.MaskedBoard.Rows; y++ {
-			if g.State.DiscoveredTiles[x][y] == false {
-				g.MaskedBoard.Tiles[x][y] = minesweeper.Unknown
-			} else {
+			if g.State.DiscoveredTiles[x][y] == true {
 				g.MaskedBoard.Tiles[x][y] = g.Board.Tiles[x][y]
 			}
 		}
@@ -85,8 +80,17 @@ func (g *Game) initMaskedBoard() {
 			Cols:  g.Board.Cols,
 			Rows:  g.Board.Rows,
 			Mines: g.Board.Mines,
-			Tiles: [][]minesweeper.Tile{},
 		}
 		g.MaskedBoard = &maskedBoard
+
+		var x, y int32
+		tiles := make([][]minesweeper.Tile, g.Board.Cols)
+		for x = 0; x < g.MaskedBoard.Cols; x++ {
+			tiles[x] = make([]minesweeper.Tile, g.MaskedBoard.Rows)
+			for y = 0; y < g.MaskedBoard.Rows; y++ {
+				tiles[x][y] = minesweeper.Unknown
+			}
+		}
+		g.MaskedBoard.Tiles = tiles
 	}
 }

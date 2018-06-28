@@ -36,10 +36,15 @@ type Game interface {
 	Exit()
 }
 
+type GameEventCallbacks interface {
+	OnLeftClick(x, y int32)
+	OnRightClick(x, y int32)
+}
+
 type UI interface {
 	Draw(*Board)
 	ManageInput()
-	UpdateState(func(x, y int32))
+	UpdateState(GameEventCallbacks)
 	ShouldRun() bool
 	StartRunning()
 }

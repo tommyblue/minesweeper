@@ -25,8 +25,9 @@ this is the point of linking between the graphy interface implementation and the
 func mapInputToFn(ui *UI) {
 	if input == nil {
 		input = &graphyInputInterface{
-			quitFn:               ui.stopRunning,
-			mouseLeftClickDownFn: ui.mouseClickAt,
+			quitFn:                ui.stopRunning,
+			mouseLeftClickDownFn:  ui.mouseLeftClickAt,
+			mouseRightClickDownFn: ui.mouseRightClickAt,
 		}
 	}
 }
@@ -36,6 +37,9 @@ The following functions map the callbacks called by graphy (through the input in
 */
 func (i *graphyInputInterface) MouseLeftClickDown(x, y int32) {
 	i.mouseLeftClickDownFn(x, y)
+}
+func (i *graphyInputInterface) MouseRightClickDown(x, y int32) {
+	i.mouseRightClickDownFn(x, y)
 }
 func (i *graphyInputInterface) Quit() {
 	i.quitFn()
@@ -47,11 +51,17 @@ Below this comment are implemented the functions called by the graphy interface
 func (ui *UI) stopRunning() {
 	ui.isRunning = false
 }
-func (ui *UI) mouseClickAt(x, y int32) {
+func (ui *UI) mouseLeftClickAt(x, y int32) {
+	ui.mouseClickAt(x, y, mouseLeftClick)
+}
+func (ui *UI) mouseRightClickAt(x, y int32) {
+	ui.mouseClickAt(x, y, mouseRightClick)
+}
+func (ui *UI) mouseClickAt(x, y int32, clickType eventType) {
 	tileX := int32(math.Floor(float64(x) / float64(ui.tileSize)))
 	tileY := int32(math.Floor(float64(y) / float64(ui.tileSize)))
 	ui.event = &event{
-		evType: mouseLeftClick,
+		evType: clickType,
 		tile: &tile{
 			x: tileX,
 			y: tileY,
