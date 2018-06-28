@@ -34,7 +34,9 @@ func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
 }
 
 func (g *Game) Start() {
-	fmt.Println("Starting game...")
+	if minesweeper.IsDebug() {
+		fmt.Println("Starting game...")
+	}
 	// loop
 	g.UI.StartRunning()
 	for g.UI.ShouldRun() {
@@ -45,7 +47,9 @@ func (g *Game) Start() {
 }
 
 func (g *Game) Exit() {
-	fmt.Println("Closing game...")
+	if minesweeper.IsDebug() {
+		fmt.Println("Closing game...")
+	}
 }
 
 func (g *Game) updateState() {
@@ -100,7 +104,9 @@ func (g *Game) rightClickOnTile(x, y int32) {
 
 func (g *Game) expandEmptyClick(x, y int32) {
 	// look around and make recursive calls
-	fmt.Printf("Expanding to %d, %d\n", x, y)
+	if minesweeper.IsDebug() {
+		fmt.Printf("Expanding to %d, %d\n", x, y)
+	}
 
 	for _, coord := range g.getCoordsToExpand(x, y) {
 		newX := coord[0]

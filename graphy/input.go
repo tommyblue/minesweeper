@@ -3,6 +3,7 @@ package graphy
 import (
 	"fmt"
 
+	"github.com/tommyblue/minesweeper"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -36,7 +37,9 @@ func ManageInput(inputInterface Input) {
 			}
 			break
 		case *sdl.QuitEvent:
-			println("Quit")
+			if minesweeper.IsDebug() {
+				println("Quitting...")
+			}
 			inputInterface.Quit()
 			break
 		}
