@@ -18,7 +18,7 @@ func main() {
 		Mines: 40,
 	}
 
-	ui := ui.Initialize()
+	ui := ui.Initialize(24)
 	game := game.Setup(board, ui)
 
 	game.Start()

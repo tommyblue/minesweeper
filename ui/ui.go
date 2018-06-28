@@ -5,11 +5,23 @@ import (
 	"github.com/tommyblue/minesweeper/graphy"
 )
 
-type UI struct {
-	isRunning bool
+type tile struct {
+	x int32
+	y int32
 }
 
-func Initialize() *UI {
+type event struct {
+	evType string
+	tile   *tile
+}
+
+type UI struct {
+	isRunning bool
+	tileSize  int32
+	event     *event
+}
+
+func Initialize(tileSize int32) *UI {
 	graphyConf := &graphy.GraphyConf{
 		Debug: minesweeper.IsDebug(),
 		Title: "Minesweeper",
@@ -23,8 +35,8 @@ func Initialize() *UI {
 		ImagesToCache:   getImagesToCache(),
 	}
 	graphy.InitGraphy(graphyConf)
-	ui := &UI{}
-	initInput(ui)
+	ui := &UI{tileSize: tileSize}
+	mapInputToFn(ui)
 
 	return ui
 }
@@ -35,8 +47,4 @@ func (ui *UI) ShouldRun() bool {
 
 func (ui *UI) StartRunning() {
 	ui.isRunning = true
-}
-
-func (ui *UI) StopRunning() {
-	ui.isRunning = false
 }

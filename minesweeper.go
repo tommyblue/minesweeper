@@ -34,7 +34,6 @@ type GameState struct {
 type Game interface {
 	Start()
 	Exit()
-	Quit()
 }
 
 type UI interface {

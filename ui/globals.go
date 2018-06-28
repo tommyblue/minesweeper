@@ -20,3 +20,14 @@ var tileImages = map[minesweeper.Tile]tileImageName{
 	minesweeper.Flag:      "flag",
 	minesweeper.Unknown:   "unknown",
 }
+
+// This struct must implement graphy.Input interface, managing all possible input events.
+// It contains the methods to be mapped to actual ui methods.
+type graphyInputInterface struct {
+	mouseLeftClickDownFn func(x, y int32)
+	quitFn               func()
+}
+
+// global var that is passed to graphy to make callbacks on events. It must implement the
+// graphy.Input interface
+var input *graphyInputInterface

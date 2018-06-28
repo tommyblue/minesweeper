@@ -35,14 +35,11 @@ func (g *Game) Start() {
 	g.UI.StartRunning()
 	for g.UI.ShouldRun() {
 		g.UI.ManageInput()
+		g.UI.UpdateState()
 		g.UI.Draw(g.MaskedBoard)
 	}
 }
 
 func (g *Game) Exit() {
 	fmt.Println("Closing game...")
-}
-
-func (g *Game) Quit() {
-	g.UI.StopRunning()
 }
