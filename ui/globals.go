@@ -19,6 +19,6 @@ var tileImages = map[minesweeper.Tile]tileImageName{
 	minesweeper.Unknown:   "unknown",
 }
 
-// global var that is passed to graphy to make callbacks on events. It must implement the
-// graphy.Input interface
-var input *graphyInputInterface
+// global var that is passed to matrigo to make callbacks on events. It must implement the
+// matrigo.Input interface
+var input *matrigoInputInterface

@@ -23,9 +23,9 @@ type UI struct {
 	event     *event
 }
 
-// This struct must implement graphy.Input interface, managing all possible input events.
+// This struct must implement matrigo.Input interface, managing all possible input events.
 // It contains the methods to be mapped to actual ui methods.
-type graphyInputInterface struct {
+type matrigoInputInterface struct {
 	mouseLeftClickDownFn  func(x, y int32)
 	mouseRightClickDownFn func(x, y int32)
 	quitFn                func()

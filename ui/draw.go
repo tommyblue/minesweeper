@@ -3,26 +3,26 @@ package ui
 import (
 	"fmt"
 
+	"github.com/tommyblue/matrigo"
 	"github.com/tommyblue/minesweeper"
-	"github.com/tommyblue/minesweeper/graphy"
 )
 
 func (ui *UI) Draw(board *minesweeper.Board) {
 	// prepare matrix
-	var tiles []graphy.Tile
+	var tiles []matrigo.Tile
 	for x, tile := range board.Tiles {
 		for y, t := range tile {
-			tiles = append(tiles, graphy.Tile{
+			tiles = append(tiles, matrigo.Tile{
 				ImageID: string(tileImages[t]),
 				PosX:    int32(x),
 				PosY:    int32(y),
 			})
 		}
 	}
-	matrix := &graphy.Matrix{
+	matrix := &matrigo.Matrix{
 		Tiles: &tiles,
 	}
-	graphy.Draw(matrix)
+	matrigo.Draw(matrix)
 }
 
 // returns a map with key of the image and its path

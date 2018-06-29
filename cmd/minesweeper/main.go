@@ -19,6 +19,7 @@ func main() {
 	}
 
 	ui := ui.Initialize(24)
+	defer ui.Close()
 	game := game.Setup(board, ui)
 
 	game.Start()

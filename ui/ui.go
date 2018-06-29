@@ -1,31 +1,37 @@
 package ui
 
 import (
+	"github.com/tommyblue/matrigo"
 	"github.com/tommyblue/minesweeper"
-	"github.com/tommyblue/minesweeper/graphy"
 )
 
 // Initialize the ui
 func Initialize(tileSize int32) *UI {
-	graphyConf := &graphy.GraphyConf{
+	matrigoConf := &matrigo.Conf{
 		TileSize: tileSize,
-		Window: &graphy.Window{
+		Window: &matrigo.Window{
 			Width:  800,
 			Height: 600,
 		},
 		Debug: minesweeper.IsDebug(),
 		Title: "Minesweeper",
-		Fonts: map[string]graphy.FontConfig{
+		Fonts: map[string]matrigo.FontConfig{
 			"mono": {
-				Path: "../assets/fonts/mono.ttf",
+				Path: getAbsolutePath("../assets/fonts/mono.ttf"),
 				Size: 14,
 			},
 		},
 		BackgroundColor: &[4]uint8{255, 255, 255, 255},
 		BackgroundImage: getAbsolutePath("../assets/images/bg.jpg"),
 		ImagesToCache:   getImagesToCache(),
+		SyncFPS:         true,
 	}
-	graphy.InitGraphy(graphyConf)
+
+	err := matrigo.Init(matrigoConf)
+	if err != nil {
+		panic(err)
+	}
+
 	ui := &UI{tileSize: tileSize}
 	mapInputToFn(ui)
 
@@ -40,4 +46,9 @@ func (ui *UI) ShouldRun() bool {
 // StartRunning starts the game loop
 func (ui *UI) StartRunning() {
 	ui.isRunning = true
+}
+
+// Close everything
+func (ui *UI) Close() {
+	matrigo.Close()
 }
