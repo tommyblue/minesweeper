@@ -26,6 +26,7 @@ func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
 	}
 	game.setInitialState()
 
+	// TODO: move away, like when the user clicks "new" and selects the level
 	game.setMines()
 	if minesweeper.IsDebug() {
 		printTiles(game.Board.Tiles)
@@ -42,7 +43,7 @@ func (g *Game) Start() {
 	for g.UI.ShouldRun() {
 		g.UI.ManageInput()
 		g.updateState()
-		g.UI.Draw(g.MaskedBoard)
+		g.UI.Draw(g.State.CurrentState, g.MaskedBoard)
 	}
 }
 
@@ -56,22 +57,33 @@ func (g *Game) updateState() {
 	g.UI.UpdateState(g.EventCallbacks)
 }
 
-func (g *Game) leftClickOnTile(x, y int32) {
-	canClick := g.State.CurrentState == minesweeper.InAGame &&
-		g.State.DiscoveredTiles[x][y] != true &&
-		g.MaskedBoard.Tiles[x][y] != minesweeper.Flag
-	if canClick {
-		g.State.DiscoveredTiles[x][y] = true
-		switch g.Board.Tiles[x][y] {
-		case minesweeper.Mine:
-			g.setState(minesweeper.Lost)
-			g.mineExplodedAt(x, y)
-			break
-		case minesweeper.Empty:
-			g.expandEmptyClick(x, y)
-			break
+func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *minesweeper.Position) {
+	x := tileClick.X
+	y := tileClick.Y
+	switch g.State.CurrentState {
+	case minesweeper.InitialScreen:
+		if mouseClick.X > 0 && mouseClick.X <= 101 &&
+			mouseClick.Y > 0 && mouseClick.Y <= 36 {
+			g.setState(minesweeper.InAGame)
 		}
-		g.updateMaskedBoard()
+		break
+	case minesweeper.InAGame:
+		canClick := g.State.DiscoveredTiles[x][y] != true &&
+			g.MaskedBoard.Tiles[x][y] != minesweeper.Flag
+		if canClick {
+			g.State.DiscoveredTiles[x][y] = true
+			switch g.Board.Tiles[x][y] {
+			case minesweeper.Mine:
+				g.setState(minesweeper.Lost)
+				g.mineExplodedAt(x, y)
+				break
+			case minesweeper.Empty:
+				g.expandEmptyClick(x, y)
+				break
+			}
+			g.updateMaskedBoard()
+		}
+		break
 	}
 }
 
@@ -91,14 +103,20 @@ func (g *Game) showAllMines() {
 	}
 }
 
-func (g *Game) rightClickOnTile(x, y int32) {
-	if g.State.CurrentState == minesweeper.InAGame && g.State.DiscoveredTiles[x][y] != true {
-		if g.MaskedBoard.Tiles[x][y] != minesweeper.Flag {
-			g.MaskedBoard.Tiles[x][y] = minesweeper.Flag
-		} else {
-			g.MaskedBoard.Tiles[x][y] = minesweeper.Unknown
+func (g *Game) rightClickOnTile(tileClick *minesweeper.Position, mouseClick *minesweeper.Position) {
+	switch g.State.CurrentState {
+	case minesweeper.InAGame:
+		x := tileClick.X
+		y := tileClick.Y
+		if g.State.DiscoveredTiles[x][y] != true {
+			if g.MaskedBoard.Tiles[x][y] != minesweeper.Flag {
+				g.MaskedBoard.Tiles[x][y] = minesweeper.Flag
+			} else {
+				g.MaskedBoard.Tiles[x][y] = minesweeper.Unknown
+			}
+			g.updateMaskedBoard()
 		}
-		g.updateMaskedBoard()
+		break
 	}
 }
 

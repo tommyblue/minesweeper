@@ -7,7 +7,31 @@ import (
 	"github.com/tommyblue/minesweeper"
 )
 
-func (ui *UI) Draw(board *minesweeper.Board) {
+func (ui *UI) Draw(state minesweeper.State, board *minesweeper.Board) {
+	switch state {
+	case minesweeper.InitialScreen:
+		ui.drawInitialScreen()
+		break
+	case minesweeper.InAGame:
+		ui.drawGame(board)
+		break
+	}
+}
+
+func (ui *UI) drawInitialScreen() {
+	matrix := &matrigo.Matrix{
+		Tiles: &[]matrigo.Tile{
+			{
+				ImageID: "button_new",
+				PosX:    0,
+				PosY:    0,
+			},
+		},
+	}
+	matrigo.Draw(matrix)
+}
+
+func (ui *UI) drawGame(board *minesweeper.Board) {
 	// prepare matrix
 	var tiles []matrigo.Tile
 	for x, tile := range board.Tiles {
@@ -31,5 +55,6 @@ func getImagesToCache() *map[string]string {
 	for _, v := range tileImages {
 		ret[string(v)] = getAbsolutePath(fmt.Sprintf("../assets/images/%s.png", v))
 	}
+	ret["button_new"] = getAbsolutePath("../assets/images/button_new.png")
 	return &ret
 }

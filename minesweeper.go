@@ -49,16 +49,21 @@ type Game interface {
 }
 
 type GameEventCallbacks interface {
-	OnLeftClick(x, y int32)
-	OnRightClick(x, y int32)
+	OnLeftClick(*Position, *Position)
+	OnRightClick(*Position, *Position)
 }
 
 type UI interface {
-	Draw(*Board)
+	Draw(State, *Board)
 	ManageInput()
 	UpdateState(GameEventCallbacks)
 	ShouldRun() bool
 	StartRunning()
+}
+
+type Position struct {
+	X int32
+	Y int32
 }
 
 func IsDebug() bool {

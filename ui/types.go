@@ -1,9 +1,6 @@
 package ui
 
-type tile struct {
-	x int32
-	y int32
-}
+import "github.com/tommyblue/minesweeper"
 
 type eventType int
 
@@ -13,8 +10,9 @@ const (
 )
 
 type event struct {
-	evType eventType
-	tile   *tile
+	evType     eventType
+	tile       *minesweeper.Position
+	mouseClick *minesweeper.Position
 }
 
 type UI struct {

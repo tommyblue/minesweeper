@@ -49,7 +49,7 @@ func (g *Game) setInitialState() {
 	// All tiles are still to be discovered
 	g.State = &minesweeper.GameState{
 		DiscoveredTiles: [][]bool{},
-		CurrentState:    minesweeper.InAGame,
+		CurrentState:    minesweeper.InitialScreen,
 	}
 	g.State.DiscoveredTiles = make([][]bool, g.Board.Cols)
 

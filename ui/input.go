@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/tommyblue/matrigo"
+	"github.com/tommyblue/minesweeper"
 )
 
 /*
@@ -62,9 +63,13 @@ func (ui *UI) mouseClickAt(x, y int32, clickType eventType) {
 	tileY := int32(math.Floor(float64(y) / float64(ui.tileSize)))
 	ui.event = &event{
 		evType: clickType,
-		tile: &tile{
-			x: tileX,
-			y: tileY,
+		tile: &minesweeper.Position{
+			X: tileX,
+			Y: tileY,
+		},
+		mouseClick: &minesweeper.Position{
+			X: x,
+			Y: y,
 		},
 	}
 }
