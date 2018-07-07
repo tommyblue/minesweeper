@@ -26,7 +26,7 @@ this is the point of linking between the matrigo interface implementation and th
 func mapInputToFn(ui *UI) {
 	if input == nil {
 		input = &matrigoInputInterface{
-			quitFn:                ui.stopRunning,
+			quitFn:                ui.StopRunning,
 			mouseLeftClickDownFn:  ui.mouseLeftClickAt,
 			mouseRightClickDownFn: ui.mouseRightClickAt,
 		}
@@ -49,7 +49,7 @@ func (i *matrigoInputInterface) Quit() {
 /*
 Below this comment are implemented the functions called by the matrigo interface
 */
-func (ui *UI) stopRunning() {
+func (ui *UI) StopRunning() {
 	ui.isRunning = false
 }
 func (ui *UI) mouseLeftClickAt(x, y int32) {

@@ -14,11 +14,10 @@ type Game struct {
 	EventCallbacks *eventCallbacks
 }
 
-func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
+func Setup(ui minesweeper.UI) minesweeper.Game {
 
 	game := &Game{
-		Board: board,
-		UI:    ui,
+		UI: ui,
 	}
 	game.EventCallbacks = &eventCallbacks{
 		leftClick:  game.leftClickOnTile,
@@ -26,11 +25,6 @@ func Setup(board *minesweeper.Board, ui minesweeper.UI) minesweeper.Game {
 	}
 	game.setInitialState()
 
-	// TODO: move away, like when the user clicks "new" and selects the level
-	game.setMines()
-	if minesweeper.IsDebug() {
-		printTiles(game.Board.Tiles)
-	}
 	return game
 }
 
@@ -58,24 +52,39 @@ func (g *Game) updateState() {
 }
 
 func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *minesweeper.Position) {
-	x := tileClick.X
-	y := tileClick.Y
 	switch g.State.CurrentState {
-	case minesweeper.InitialScreen:
-		if mouseClick.X > 0 && mouseClick.X <= 101 &&
-			mouseClick.Y > 0 && mouseClick.Y <= 36 {
+	case minesweeper.InitialScreen, minesweeper.Lost:
+		if mouseClick.ClickedOn(minesweeper.Rect{X0: 0, X1: 101, Y0: 0, Y1: 36}) {
+			g.setState(minesweeper.SelectLevel)
+		} else if mouseClick.ClickedOn(minesweeper.Rect{X0: 0, X1: 101, Y0: 40, Y1: 76}) {
+			g.UI.StopRunning()
+		}
+		break
+	case minesweeper.SelectLevel:
+		if mouseClick.ClickedOn(minesweeper.Rect{X0: 0, X1: 75, Y0: 0, Y1: 36*3 + 8}) {
+			if mouseClick.ClickedOn(minesweeper.Rect{X0: 0, X1: 75, Y0: 0, Y1: 36}) {
+				g.selectLevel(minesweeper.EasyLevel)
+			} else if mouseClick.ClickedOn(minesweeper.Rect{X0: 0, X1: 75, Y0: 40, Y1: 76}) {
+				g.selectLevel(minesweeper.MediumLevel)
+			} else {
+				g.selectLevel(minesweeper.HardLevel)
+			}
+			g.initLevel()
 			g.setState(minesweeper.InAGame)
 		}
 		break
 	case minesweeper.InAGame:
+		x := tileClick.X
+		y := tileClick.Y
 		canClick := g.State.DiscoveredTiles[x][y] != true &&
 			g.MaskedBoard.Tiles[x][y] != minesweeper.Flag
 		if canClick {
 			g.State.DiscoveredTiles[x][y] = true
 			switch g.Board.Tiles[x][y] {
 			case minesweeper.Mine:
-				g.setState(minesweeper.Lost)
+				fmt.Println("You lose!")
 				g.mineExplodedAt(x, y)
+				g.setState(minesweeper.Lost)
 				break
 			case minesweeper.Empty:
 				g.expandEmptyClick(x, y)
@@ -99,6 +108,15 @@ func (g *Game) showAllMines() {
 			if g.Board.Tiles[x][y] == minesweeper.Mine {
 				g.State.DiscoveredTiles[x][y] = true
 			}
+		}
+	}
+}
+
+func (g *Game) resetDiscoveredTiles() {
+	var x, y int32
+	for x = 0; x < g.Board.Cols; x++ {
+		for y = 0; y < g.Board.Rows; y++ {
+			g.State.DiscoveredTiles[x][y] = false
 		}
 	}
 }

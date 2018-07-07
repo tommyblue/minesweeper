@@ -1,6 +1,8 @@
 package minesweeper
 
-import "os"
+import (
+	"os"
+)
 
 type Tile int
 
@@ -24,7 +26,7 @@ const (
 type Board struct {
 	Cols  int32
 	Rows  int32
-	Mines int
+	Mines int32
 	Tiles [][]Tile
 }
 
@@ -38,9 +40,18 @@ const (
 	Win
 )
 
+type Level int
+
+const (
+	EasyLevel Level = iota
+	MediumLevel
+	HardLevel
+)
+
 type GameState struct {
 	DiscoveredTiles [][]bool
 	CurrentState    State
+	SelectedLevel   Level
 }
 
 type Game interface {
@@ -59,11 +70,26 @@ type UI interface {
 	UpdateState(GameEventCallbacks)
 	ShouldRun() bool
 	StartRunning()
+	StopRunning()
 }
 
+// Position defines a 2D (X,Y) position
 type Position struct {
 	X int32
 	Y int32
+}
+
+// Rect defines a rectangle
+type Rect struct {
+	X0 int32
+	Y0 int32
+	X1 int32
+	Y1 int32
+}
+
+func (p *Position) ClickedOn(clickArea Rect) bool {
+	return p.X > clickArea.X0 && p.X <= clickArea.X1 &&
+		p.Y > clickArea.Y0 && p.Y <= clickArea.Y1
 }
 
 func IsDebug() bool {
