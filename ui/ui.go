@@ -52,3 +52,8 @@ func (ui *UI) StartRunning() {
 func (ui *UI) Close() {
 	matrigo.Close()
 }
+
+// GetButton return a button struct from the initialized buttons
+func (ui *UI) GetButton(buttonID string) *minesweeper.Button {
+	return buttons[buttonID]
+}

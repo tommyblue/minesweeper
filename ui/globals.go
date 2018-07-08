@@ -22,3 +22,31 @@ var tileImages = map[minesweeper.Tile]tileImageName{
 // global var that is passed to matrigo to make callbacks on events. It must implement the
 // matrigo.Input interface
 var input *matrigoInputInterface
+
+var buttons = map[string]*minesweeper.Button{
+	"button_new": &minesweeper.Button{
+		Src: getAbsolutePath("../assets/images/buttons/new_game.png"),
+		W:   190,
+		H:   49,
+	},
+	"button_quit": &minesweeper.Button{
+		Src: getAbsolutePath("../assets/images/buttons/quit.png"),
+		W:   190,
+		H:   49,
+	},
+	"button_easy": &minesweeper.Button{
+		Src: getAbsolutePath("../assets/images/buttons/easy.png"),
+		W:   190,
+		H:   49,
+	},
+	"button_medium": &minesweeper.Button{
+		Src: getAbsolutePath("../assets/images/buttons/medium.png"),
+		W:   190,
+		H:   49,
+	},
+	"button_hard": &minesweeper.Button{
+		Src: getAbsolutePath("../assets/images/buttons/hard.png"),
+		W:   190,
+		H:   49,
+	},
+}

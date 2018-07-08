@@ -63,18 +63,18 @@ func (ui *UI) drawLevelSelection() {
 	matrix := &matrigo.Matrix{
 		Tiles: &[]matrigo.Tile{
 			{
-				ImageID: "level_easy",
+				ImageID: "button_easy",
 				PosX:    0,
 				PosY:    0,
 			},
 			{
-				ImageID: "level_medium",
+				ImageID: "button_medium",
 				PosX:    0,
 				PosY:    1,
 				OffsetY: 4,
 			},
 			{
-				ImageID: "level_hard",
+				ImageID: "button_hard",
 				PosX:    0,
 				PosY:    2,
 				OffsetY: 8,
@@ -111,12 +111,13 @@ func (ui *UI) getGameToDraw(board *minesweeper.Board) *matrigo.Matrix {
 func getImagesToCache() *map[string]string {
 	ret := make(map[string]string)
 	for _, v := range tileImages {
-		ret[string(v)] = getAbsolutePath(fmt.Sprintf("../assets/images/%s.png", v))
+		ret[string(v)] = getAbsolutePath(fmt.Sprintf("../assets/images/tiles/%s.png", v))
 	}
-	ret["button_new"] = getAbsolutePath("../assets/images/button_new.png")
-	ret["button_quit"] = getAbsolutePath("../assets/images/button_quit.png")
-	ret["level_easy"] = getAbsolutePath("../assets/images/easy.png")
-	ret["level_medium"] = getAbsolutePath("../assets/images/medium.png")
-	ret["level_hard"] = getAbsolutePath("../assets/images/hard.png")
+	for k, v := range buttons {
+		ret[k] = v.Src
+	}
+	ret["button_easy"] = getAbsolutePath("../assets/images/buttons/easy.png")
+	ret["button_medium"] = getAbsolutePath("../assets/images/buttons/medium.png")
+	ret["button_hard"] = getAbsolutePath("../assets/images/buttons/hard.png")
 	return &ret
 }

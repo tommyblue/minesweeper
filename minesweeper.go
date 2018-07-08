@@ -71,6 +71,13 @@ type UI interface {
 	ShouldRun() bool
 	StartRunning()
 	StopRunning()
+	GetButton(string) *Button
+}
+
+type Button struct {
+	W   int32
+	H   int32
+	Src string
 }
 
 // Position defines a 2D (X,Y) position
