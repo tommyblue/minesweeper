@@ -1,4 +1,9 @@
 # minesweeper
+
+[![CircleCI](https://circleci.com/gh/tommyblue/minesweeper.svg?style=svg)](https://circleci.com/gh/tommyblue/minesweeper)
+
+[![Coverage Status](https://coveralls.io/repos/github/tommyblue/minesweeper/badge.svg?branch=master)](https://coveralls.io/github/tommyblue/minesweeper?branch=master)
+
 A Go clone of the popular game
 
 ## Setup

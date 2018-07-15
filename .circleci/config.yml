@@ -1,0 +1,25 @@
+# Golang CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-go/ for more details
+version: 2
+jobs:
+    build:
+        docker:
+            # specify the version
+            - image: circleci/golang:1.9
+        working_directory: /go/src/github.com/tommyblue/minesweeper
+        environment:
+            DISPLAY: :99
+        steps:
+            - checkout
+
+            - run: sudo apt-get update -qq && sudo apt-get install -y -qq xvfb libsdl2{,-mixer,-image,-ttf,-gfx}-dev
+            - run: go get -v github.com/veandco/go-sdl2/{sdl,img,mix,ttf}
+            - run: go get -v -t -d ./...
+            - run: go get github.com/mattn/goveralls
+            - run:
+                name: Running X virtual framebuffer
+                command: Xvfb -ac :99 -screen 0 800x600x16 +extension RANDR
+                background: true
+            - run: go test -v -cover -race -coverprofile=/go/src/coverage.out
+            - run: goveralls -coverprofile=/go/src/coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
