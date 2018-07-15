@@ -146,7 +146,7 @@ func TestGame_setMines(t *testing.T) {
 		})
 
 		g.setMines()
-		countedMines := 0
+		var countedMines int32 = 0
 		t.Run("Board should be populated", func(t *testing.T) {
 			for x = 0; x < g.Board.Cols; x++ {
 				for y = 0; y < g.Board.Rows; y++ {
