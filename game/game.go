@@ -6,6 +6,7 @@ import (
 	"github.com/tommyblue/minesweeper"
 )
 
+// Game represents the main game object
 type Game struct {
 	Board          *minesweeper.Board
 	State          *minesweeper.GameState
@@ -14,6 +15,7 @@ type Game struct {
 	EventCallbacks *eventCallbacks
 }
 
+// Setup the game, setting mouse click callbacks and the initial state
 func Setup(ui minesweeper.UI) minesweeper.Game {
 
 	game := &Game{
@@ -28,6 +30,7 @@ func Setup(ui minesweeper.UI) minesweeper.Game {
 	return game
 }
 
+// Start the game running the main game loop
 func (g *Game) Start() {
 	if minesweeper.IsDebug() {
 		fmt.Println("Starting game...")
@@ -41,6 +44,7 @@ func (g *Game) Start() {
 	}
 }
 
+// Exit is called at the end of the game. Make cleanups here
 func (g *Game) Exit() {
 	if minesweeper.IsDebug() {
 		fmt.Println("Closing game...")
@@ -54,18 +58,20 @@ func (g *Game) updateState() {
 func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *minesweeper.Position) {
 	switch g.State.CurrentState {
 	case minesweeper.InitialScreen, minesweeper.Lost:
+		new := g.UI.GetButton("button_new")
+		quit := g.UI.GetButton("button_quit")
 		if mouseClick.ClickedOn(minesweeper.Rect{
-			X0: 0,
-			X1: g.UI.GetButton("button_new").W,
-			Y0: 0,
-			Y1: g.UI.GetButton("button_new").H,
+			X0: new.X,
+			X1: new.X + new.W,
+			Y0: new.Y,
+			Y1: new.Y + new.H,
 		}) {
 			g.setState(minesweeper.SelectLevel)
 		} else if mouseClick.ClickedOn(minesweeper.Rect{
-			X0: 0,
-			X1: g.UI.GetButton("button_quit").W,
-			Y0: g.UI.GetButton("button_new").H + 4,
-			Y1: g.UI.GetButton("button_new").H + 4 + g.UI.GetButton("button_quit").H,
+			X0: quit.X,
+			X1: quit.X + quit.W,
+			Y0: quit.Y + quit.H + 4,
+			Y1: quit.Y + quit.H + 4 + quit.H,
 		}) {
 			g.UI.StopRunning()
 		}
@@ -75,26 +81,29 @@ func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *mine
 		medium := g.UI.GetButton("button_medium")
 		hard := g.UI.GetButton("button_hard")
 		if mouseClick.ClickedOn(minesweeper.Rect{
-			X0: 0,
-			X1: easy.W,
-			Y0: 0,
-			Y1: easy.H,
+			X0: easy.X,
+			X1: easy.X + easy.W,
+			Y0: easy.Y,
+			Y1: easy.Y + easy.H,
 		}) {
 			g.selectLevel(minesweeper.EasyLevel)
 		} else if mouseClick.ClickedOn(minesweeper.Rect{
-			X0: 0,
-			X1: medium.W,
-			Y0: easy.H + 4,
-			Y1: easy.H + 4 + medium.H,
+			X0: medium.X,
+			X1: medium.X + medium.W,
+			Y0: medium.Y + easy.H + 4,
+			Y1: medium.Y + easy.H + 4 + medium.H,
 		}) {
 			g.selectLevel(minesweeper.MediumLevel)
 		} else if mouseClick.ClickedOn(minesweeper.Rect{
-			X0: 0,
-			X1: hard.W,
-			Y0: easy.H + 4 + medium.H + 4,
-			Y1: easy.H + 4 + medium.H + 4 + hard.H,
+			X0: hard.X,
+			X1: hard.X + hard.W,
+			Y0: hard.Y + easy.H + 4 + medium.H + 4,
+			Y1: hard.Y + easy.H + 4 + medium.H + 4 + hard.H,
 		}) {
 			g.selectLevel(minesweeper.HardLevel)
+		} else {
+			// Click outside buttons
+			break
 		}
 		g.initLevel()
 		g.setState(minesweeper.InAGame)

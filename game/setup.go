@@ -58,17 +58,17 @@ func (g *Game) initLevel() {
 	case minesweeper.EasyLevel:
 		cols = 20
 		rows = 15
-		mines = 5
+		mines = 30
 		break
 	case minesweeper.MediumLevel:
 		cols = 25
 		rows = 20
-		mines = 80
+		mines = 60
 		break
 	case minesweeper.HardLevel:
 		cols = 33
 		rows = 25
-		mines = 200
+		mines = 150
 		break
 	}
 	g.Board = &minesweeper.Board{

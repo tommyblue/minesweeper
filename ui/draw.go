@@ -41,45 +41,43 @@ func (ui *UI) drawInitialScreen() {
 }
 
 func (ui *UI) getInitialButtons() *matrigo.Matrix {
+	var tiles []matrigo.Tile
+	for i, id := range []string{"button_new", "button_quit"} {
+		b := ui.GetButton(id)
+		// Draw buttons in the centered position
+		b.X, b.Y = centerImgPosition(b.W, b.H, int32(i), int32(2))
+		tile := matrigo.Tile{
+			ImageID: id,
+			PosX:    0,
+			PosY:    int32(i),
+			OffsetX: b.X,
+			OffsetY: b.Y,
+		}
+		tiles = append(tiles, tile)
+	}
 	matrix := &matrigo.Matrix{
-		Tiles: &[]matrigo.Tile{
-			{
-				ImageID: "button_new",
-				PosX:    0,
-				PosY:    0,
-			},
-			{
-				ImageID: "button_quit",
-				PosX:    0,
-				PosY:    1,
-				OffsetY: 4,
-			},
-		},
+		Tiles: &tiles,
 	}
 	return matrix
 }
 
 func (ui *UI) drawLevelSelection() {
+	var tiles []matrigo.Tile
+	for i, id := range []string{"button_easy", "button_medium", "button_hard"} {
+		b := ui.GetButton(id)
+		// Draw buttons in the centered position
+		b.X, b.Y = centerImgPosition(b.W, b.H, int32(i), int32(3))
+		tile := matrigo.Tile{
+			ImageID: id,
+			PosX:    0,
+			PosY:    int32(i),
+			OffsetX: b.X,
+			OffsetY: b.Y,
+		}
+		tiles = append(tiles, tile)
+	}
 	matrix := &matrigo.Matrix{
-		Tiles: &[]matrigo.Tile{
-			{
-				ImageID: "button_easy",
-				PosX:    0,
-				PosY:    0,
-			},
-			{
-				ImageID: "button_medium",
-				PosX:    0,
-				PosY:    1,
-				OffsetY: 4,
-			},
-			{
-				ImageID: "button_hard",
-				PosX:    0,
-				PosY:    2,
-				OffsetY: 8,
-			},
-		},
+		Tiles: &tiles,
 	}
 	matrigo.Draw(matrix)
 }

@@ -78,6 +78,8 @@ type Button struct {
 	W   int32
 	H   int32
 	Src string
+	X   int32 // X position where the button has been drawn
+	Y   int32 // Y position where the button has been drawn
 }
 
 // Position defines a 2D (X,Y) position
