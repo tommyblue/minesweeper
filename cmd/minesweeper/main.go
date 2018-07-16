@@ -16,5 +16,4 @@ func main() {
 	game := game.Setup(ui)
 
 	game.Start()
-	defer game.Exit()
 }

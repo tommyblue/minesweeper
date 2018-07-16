@@ -54,11 +54,6 @@ type GameState struct {
 	SelectedLevel   Level
 }
 
-type Game interface {
-	Start()
-	Exit()
-}
-
 type GameEventCallbacks interface {
 	OnLeftClick(*Position, *Position)
 	OnRightClick(*Position, *Position)

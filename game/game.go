@@ -16,7 +16,7 @@ type Game struct {
 }
 
 // Setup the game, setting mouse click callbacks and the initial state
-func Setup(ui minesweeper.UI) minesweeper.Game {
+func Setup(ui minesweeper.UI) *Game {
 
 	game := &Game{
 		UI: ui,
@@ -41,13 +41,6 @@ func (g *Game) Start() {
 		g.UI.ManageInput()
 		g.updateState()
 		g.UI.Draw(g.State.CurrentState, g.MaskedBoard)
-	}
-}
-
-// Exit is called at the end of the game. Make cleanups here
-func (g *Game) Exit() {
-	if minesweeper.IsDebug() {
-		fmt.Println("Closing game...")
 	}
 }
 
