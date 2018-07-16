@@ -6,6 +6,8 @@
 
 A Go clone of the popular game
 
+![Minesweeper screenshot](https://github.com/tommyblue/minesweeper/blob/master/minesweeper.png?raw=true)
+
 ## Setup
 
 Simple as `./script/setup`
