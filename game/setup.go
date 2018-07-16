@@ -1,13 +1,12 @@
 package game
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/tommyblue/minesweeper"
 )
 
-func (g *Game) initBoard() {
+func (g *Game) initBoardTiles() {
 	g.Board.Tiles = make([][]minesweeper.Tile, g.Board.Cols)
 	var i int32
 	for i = 0; i < g.Board.Cols; i++ {
@@ -17,7 +16,7 @@ func (g *Game) initBoard() {
 
 // put mines randomly
 func (g *Game) setMines() {
-	g.initBoard()
+	g.initBoardTiles()
 	minesToBePlaced := g.Board.Mines
 	for minesToBePlaced > 0 {
 		col := rand.Int31n(g.Board.Cols)
@@ -52,7 +51,7 @@ func (g *Game) setInitialState() {
 	}
 }
 
-func (g *Game) initLevel() {
+func (g *Game) initBoard() {
 	var cols, rows, mines int32
 	switch g.State.SelectedLevel {
 	case minesweeper.EasyLevel:
@@ -76,7 +75,9 @@ func (g *Game) initLevel() {
 		Rows:  rows,
 		Mines: mines,
 	}
+}
 
+func (g *Game) initDiscoveredTiles() {
 	g.State.DiscoveredTiles = make([][]bool, g.Board.Cols)
 
 	var x, y int32
@@ -86,6 +87,11 @@ func (g *Game) initLevel() {
 			g.State.DiscoveredTiles[x][y] = false
 		}
 	}
+}
+
+func (g *Game) initLevel() {
+	g.initBoard()
+	g.initDiscoveredTiles()
 	g.initMaskedBoard()
 	g.updateMaskedBoard()
 
@@ -95,9 +101,15 @@ func (g *Game) initLevel() {
 	}
 }
 
+/*
+Updates the MaskedBoard "discovering" tiles, i.e. copying
+the tile value from Board.Tiles if that tile has value
+true in State.DiscoveredTiles.
+After this updated, check the winning condition
+*/
 func (g *Game) updateMaskedBoard() {
 	var x, y int32
-	var unmaskedTiles int32 = 0
+	var unmaskedTiles int32
 	for x = 0; x < g.MaskedBoard.Cols; x++ {
 		for y = 0; y < g.MaskedBoard.Rows; y++ {
 			if g.State.DiscoveredTiles[x][y] == true {
@@ -108,8 +120,7 @@ func (g *Game) updateMaskedBoard() {
 		}
 	}
 	if unmaskedTiles == g.Board.Mines {
-		// Win!
-		fmt.Println("You win!")
+		g.setState(minesweeper.Win)
 	}
 
 }

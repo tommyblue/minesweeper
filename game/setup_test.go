@@ -132,7 +132,9 @@ func TestGame_setMines(t *testing.T) {
 			Board: board,
 			UI:    nil,
 		}
+		g.setInitialState()
 		g.initBoard()
+		g.initBoardTiles()
 
 		var x, y int32
 		t.Run("Board should be empty", func(t *testing.T) {
@@ -161,4 +163,100 @@ func TestGame_setMines(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestGame_setInitialState(t *testing.T) {
+	g := &Game{}
+	g.setInitialState()
+
+	if g.State.CurrentState != minesweeper.InitialScreen || g.State.SelectedLevel != minesweeper.EasyLevel {
+		t.Errorf("Game wasn't correctly initialized")
+	}
+}
+
+func TestGame_initLevel(t *testing.T) {
+	g := &Game{}
+	g.setInitialState()
+	g.initLevel()
+
+	if g.State.DiscoveredTiles == nil {
+		t.Errorf("DiscoveredTiles wasn't initialized")
+	}
+	type levelTest struct {
+		level minesweeper.Level
+		cols  int32
+		rows  int32
+		mines int32
+	}
+	tests := []levelTest{
+		{minesweeper.EasyLevel, 20, 15, 30},
+		{minesweeper.MediumLevel, 25, 20, 60},
+		{minesweeper.HardLevel, 33, 25, 150},
+	}
+	for _, test := range tests {
+		g.State.SelectedLevel = test.level
+		g.initLevel()
+		if g.Board.Cols != test.cols || g.Board.Rows != test.rows || g.Board.Mines != test.mines {
+			t.Errorf("Wrong level numbers for %v", test.level)
+		}
+	}
+}
+
+func TestGame_updateMaskedBoard(t *testing.T) {
+	g := &Game{}
+	g.setInitialState()
+	g.initBoard()
+	g.initBoardTiles()
+	g.initMaskedBoard()
+	g.initDiscoveredTiles()
+
+	type testStruct struct {
+		discovered int
+		won        bool
+	}
+	tt := []testStruct{
+		{5, false},
+		{20*15 - 30, true},
+	}
+	for _, test := range tt {
+		_discoverTiles(g, test.discovered)
+		if _countDiscoveredOnMask(g) == test.discovered {
+			t.Errorf("Wrong number of discovered before update")
+		}
+		g.updateMaskedBoard()
+		if _countDiscoveredOnMask(g) != test.discovered {
+			t.Errorf("Wrong number of discovered after update")
+		}
+		if (g.State.CurrentState == minesweeper.Win) != test.won {
+			t.Errorf("Wrong win state")
+		}
+	}
+}
+
+func _discoverTiles(g *Game, tiles2discover int) {
+	still2discover := tiles2discover
+	var x, y int32
+	for x = 0; x < g.Board.Cols; x++ {
+		for y = 0; y < g.Board.Rows; y++ {
+			if still2discover > 0 {
+				g.State.DiscoveredTiles[x][y] = true
+				still2discover--
+			}
+		}
+	}
+}
+
+func _countDiscoveredOnMask(g *Game) int {
+	discovered := 0
+	var x, y int32
+	for x = 0; x < g.MaskedBoard.Cols; x++ {
+		for y = 0; y < g.MaskedBoard.Rows; y++ {
+			a := g.MaskedBoard.Tiles[x][y]
+			b := g.Board.Tiles[x][y]
+			if a == b {
+				discovered++
+			}
+		}
+	}
+	return discovered
 }
