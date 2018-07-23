@@ -59,8 +59,12 @@ func (ui *UI) mouseRightClickAt(x, y int32) {
 	ui.mouseClickAt(x, y, mouseRightClick)
 }
 func (ui *UI) mouseClickAt(x, y int32, clickType eventType) {
-	tileX := int32(math.Floor(float64(x) / float64(ui.tileSize)))
-	tileY := int32(math.Floor(float64(y) / float64(ui.tileSize)))
+	newX := x - (ui.window.Width / 2) + ((ui.cols * ui.tileSize) / 2)
+	newY := y - (ui.window.Height / 2) + ((ui.rows * ui.tileSize) / 2)
+
+	tileX := int32(math.Floor(float64(newX) / float64(ui.tileSize)))
+	tileY := int32(math.Floor(float64(newY) / float64(ui.tileSize)))
+
 	ui.event = &event{
 		evType: clickType,
 		tile: &minesweeper.Position{

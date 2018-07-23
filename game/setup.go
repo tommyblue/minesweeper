@@ -56,17 +56,17 @@ func (g *Game) initBoard() {
 	switch g.State.SelectedLevel {
 	case minesweeper.EasyLevel:
 		cols = 20
-		rows = 15
+		rows = 16
 		mines = 30
 		break
 	case minesweeper.MediumLevel:
-		cols = 25
+		cols = 26
 		rows = 20
 		mines = 60
 		break
 	case minesweeper.HardLevel:
-		cols = 33
-		rows = 25
+		cols = 32
+		rows = 24
 		mines = 150
 		break
 	}
@@ -75,6 +75,7 @@ func (g *Game) initBoard() {
 		Rows:  rows,
 		Mines: mines,
 	}
+	g.UI.SetTileSizes(cols, rows)
 }
 
 func (g *Game) initDiscoveredTiles() {

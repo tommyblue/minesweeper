@@ -7,14 +7,15 @@ import (
 
 // Initialize the ui
 func Initialize(tileSize int32) *UI {
+	w := &matrigo.Window{
+		Width:  800,
+		Height: 600,
+	}
 	matrigoConf := &matrigo.Conf{
 		TileSize: tileSize,
-		Window: &matrigo.Window{
-			Width:  800,
-			Height: 600,
-		},
-		Debug: minesweeper.IsDebug(),
-		Title: "Minesweeper",
+		Window:   w,
+		Debug:    minesweeper.IsDebug(),
+		Title:    "Minesweeper",
 		Fonts: map[string]matrigo.FontConfig{
 			"mono": {
 				Path: getAbsolutePath("../assets/fonts/mono.ttf"),
@@ -32,10 +33,26 @@ func Initialize(tileSize int32) *UI {
 		panic(err)
 	}
 
-	ui := &UI{tileSize: tileSize}
+	ui := &UI{
+		window:   w,
+		tileSize: tileSize,
+	}
 	mapInputToFn(ui)
 
 	return ui
+}
+
+func (ui *UI) SetTileSizes(cols, rows int32) {
+	ui.cols = cols
+	ui.rows = rows
+}
+
+func (ui *UI) GetCols() int32 {
+	return ui.cols
+}
+
+func (ui *UI) GetRows() int32 {
+	return ui.rows
 }
 
 // ShouldRun checks whether the game loop should be running

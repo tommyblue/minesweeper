@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/tommyblue/minesweeper"
+	"github.com/tommyblue/minesweeper/ui"
 )
 
 func TestGame_updateNumbersAroundMine(t *testing.T) {
@@ -128,9 +129,10 @@ func TestGame_setMines(t *testing.T) {
 			Mines: b.Mines,
 		}
 
+		ui := ui.Initialize(24)
 		g := &Game{
 			Board: board,
-			UI:    nil,
+			UI:    ui,
 		}
 		g.setInitialState()
 		g.initBoard()
@@ -175,7 +177,8 @@ func TestGame_setInitialState(t *testing.T) {
 }
 
 func TestGame_initLevel(t *testing.T) {
-	g := &Game{}
+	ui := ui.Initialize(24)
+	g := &Game{UI: ui}
 	g.setInitialState()
 	g.initLevel()
 
@@ -189,9 +192,9 @@ func TestGame_initLevel(t *testing.T) {
 		mines int32
 	}
 	tests := []levelTest{
-		{minesweeper.EasyLevel, 20, 15, 30},
-		{minesweeper.MediumLevel, 25, 20, 60},
-		{minesweeper.HardLevel, 33, 25, 150},
+		{minesweeper.EasyLevel, 20, 16, 30},
+		{minesweeper.MediumLevel, 26, 20, 60},
+		{minesweeper.HardLevel, 32, 24, 150},
 	}
 	for _, test := range tests {
 		g.State.SelectedLevel = test.level
@@ -203,7 +206,8 @@ func TestGame_initLevel(t *testing.T) {
 }
 
 func TestGame_updateMaskedBoard(t *testing.T) {
-	g := &Game{}
+	ui := ui.Initialize(24)
+	g := &Game{UI: ui}
 	g.setInitialState()
 	g.initBoard()
 	g.initBoardTiles()
@@ -216,7 +220,7 @@ func TestGame_updateMaskedBoard(t *testing.T) {
 	}
 	tt := []testStruct{
 		{5, false},
-		{20*15 - 30, true},
+		{20*16 - 30, true},
 	}
 	for _, test := range tt {
 		_discoverTiles(g, test.discovered)
@@ -228,7 +232,7 @@ func TestGame_updateMaskedBoard(t *testing.T) {
 			t.Errorf("Wrong number of discovered after update")
 		}
 		if (g.State.CurrentState == minesweeper.Win) != test.won {
-			t.Errorf("Wrong win state")
+			t.Errorf("Wrong win state: %v", g.State.CurrentState)
 		}
 	}
 }

@@ -50,6 +50,17 @@ func (g *Game) updateState() {
 
 func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *minesweeper.Position) {
 	switch g.State.CurrentState {
+	case minesweeper.Win:
+		win := g.UI.GetButton("button_win")
+		if mouseClick.ClickedOn(minesweeper.Rect{
+			X0: win.X,
+			X1: win.X + win.W,
+			Y0: win.Y,
+			Y1: win.Y + win.H,
+		}) {
+			g.setState(minesweeper.InitialScreen)
+		}
+		break
 	case minesweeper.InitialScreen, minesweeper.Lost:
 		new := g.UI.GetButton("button_new")
 		quit := g.UI.GetButton("button_quit")
@@ -104,7 +115,7 @@ func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *mine
 	case minesweeper.InAGame:
 		x := tileClick.X
 		y := tileClick.Y
-		canClick := g.State.DiscoveredTiles[x][y] != true &&
+		canClick := g.isValidTileCoords(x, y) && g.State.DiscoveredTiles[x][y] != true &&
 			g.MaskedBoard.Tiles[x][y] != minesweeper.Flag
 		if canClick {
 			g.State.DiscoveredTiles[x][y] = true
@@ -121,6 +132,10 @@ func (g *Game) leftClickOnTile(tileClick *minesweeper.Position, mouseClick *mine
 		}
 		break
 	}
+}
+
+func (g *Game) isValidTileCoords(tileX, tileY int32) bool {
+	return tileX >= 0 && tileX < g.UI.GetCols() && tileY >= 0 && tileY < g.UI.GetRows()
 }
 
 func (g *Game) mineExplodedAt(x, y int32) {

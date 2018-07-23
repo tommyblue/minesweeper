@@ -22,7 +22,6 @@ Params:
 	- imgIndex: Index of the image in the loop of images to draw
 	- imgsNumber: Total number of images to draw
 */
-
 func centerImgPosition(imgWidth, imgHeight, imgIndex, imgsNumber int32) (int32, int32) {
 	var margin int32 = 4
 	var windowW int32 = 800

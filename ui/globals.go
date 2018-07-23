@@ -34,6 +34,11 @@ var buttons = map[string]*minesweeper.Button{
 		W:   190,
 		H:   49,
 	},
+	"button_win": &minesweeper.Button{
+		Src: getAbsolutePath("../assets/images/buttons/win.png"),
+		W:   190,
+		H:   49,
+	},
 	"button_easy": &minesweeper.Button{
 		Src: getAbsolutePath("../assets/images/buttons/easy.png"),
 		W:   190,

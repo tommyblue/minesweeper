@@ -67,6 +67,9 @@ type UI interface {
 	StartRunning()
 	StopRunning()
 	GetButton(string) *Button
+	SetTileSizes(int32, int32)
+	GetCols() int32
+	GetRows() int32
 }
 
 type Button struct {

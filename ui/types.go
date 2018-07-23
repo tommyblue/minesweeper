@@ -1,6 +1,9 @@
 package ui
 
-import "github.com/tommyblue/minesweeper"
+import (
+	"github.com/tommyblue/matrigo"
+	"github.com/tommyblue/minesweeper"
+)
 
 type eventType int
 
@@ -19,6 +22,9 @@ type UI struct {
 	isRunning bool
 	tileSize  int32
 	event     *event
+	window    *matrigo.Window
+	cols      int32
+	rows      int32
 }
 
 // This struct must implement matrigo.Input interface, managing all possible input events.

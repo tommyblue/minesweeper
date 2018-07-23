@@ -20,18 +20,22 @@ func (ui *UI) Draw(state minesweeper.State, board *minesweeper.Board) {
 	case minesweeper.Lost:
 		ui.drawLost(board)
 		break
+	case minesweeper.Win:
+		ui.drawWin()
+		break
 	}
 }
 
 func (ui *UI) drawLost(board *minesweeper.Board) {
-	newButton := ui.getInitialButtons()
 	gameBoard := ui.getGameToDraw(board)
-	tiles := &[]matrigo.Tile{}
-	*tiles = append(*tiles, *gameBoard.Tiles...)
-	*tiles = append(*tiles, *newButton.Tiles...)
+	tiles := []*matrigo.Tile{}
+	tiles = append(tiles, gameBoard.Tiles...)
 	matrix := &matrigo.Matrix{
 		Tiles: tiles,
 	}
+	ui.centerMatrix(matrix)
+	newButton := ui.getInitialButtons()
+	matrix.Tiles = append(matrix.Tiles, newButton.Tiles...)
 	matrigo.Draw(matrix)
 }
 
@@ -40,9 +44,22 @@ func (ui *UI) drawInitialScreen() {
 	matrigo.Draw(matrix)
 }
 
+func (ui *UI) drawWin() {
+	matrix := ui.getWinButtons()
+	matrigo.Draw(matrix)
+}
+
 func (ui *UI) getInitialButtons() *matrigo.Matrix {
-	var tiles []matrigo.Tile
-	for i, id := range []string{"button_new", "button_quit"} {
+	return ui.getButtons([]string{"button_new", "button_quit"})
+}
+
+func (ui *UI) getWinButtons() *matrigo.Matrix {
+	return ui.getButtons([]string{"button_win"})
+}
+
+func (ui *UI) getButtons(buttons []string) *matrigo.Matrix {
+	var tiles []*matrigo.Tile
+	for i, id := range buttons {
 		b := ui.GetButton(id)
 		// Draw buttons in the centered position
 		b.X, b.Y = centerImgPosition(b.W, b.H, int32(i), int32(2))
@@ -53,46 +70,38 @@ func (ui *UI) getInitialButtons() *matrigo.Matrix {
 			OffsetX: b.X,
 			OffsetY: b.Y,
 		}
-		tiles = append(tiles, tile)
+		tiles = append(tiles, &tile)
 	}
 	matrix := &matrigo.Matrix{
-		Tiles: &tiles,
+		Tiles: tiles,
 	}
 	return matrix
 }
 
 func (ui *UI) drawLevelSelection() {
-	var tiles []matrigo.Tile
-	for i, id := range []string{"button_easy", "button_medium", "button_hard"} {
-		b := ui.GetButton(id)
-		// Draw buttons in the centered position
-		b.X, b.Y = centerImgPosition(b.W, b.H, int32(i), int32(3))
-		tile := matrigo.Tile{
-			ImageID: id,
-			PosX:    0,
-			PosY:    int32(i),
-			OffsetX: b.X,
-			OffsetY: b.Y,
-		}
-		tiles = append(tiles, tile)
-	}
-	matrix := &matrigo.Matrix{
-		Tiles: &tiles,
-	}
+	matrix := ui.getButtons([]string{"button_easy", "button_medium", "button_hard"})
 	matrigo.Draw(matrix)
 }
 
 func (ui *UI) drawGame(board *minesweeper.Board) {
 	matrix := ui.getGameToDraw(board)
+	ui.centerMatrix(matrix)
 	matrigo.Draw(matrix)
+}
+
+func (ui *UI) centerMatrix(matrix *matrigo.Matrix) {
+	for _, t := range matrix.Tiles {
+		t.OffsetX = (ui.window.Width / 2) - ((ui.cols * ui.tileSize) / 2)
+		t.OffsetY = (ui.window.Height / 2) - ((ui.rows * ui.tileSize) / 2)
+	}
 }
 
 func (ui *UI) getGameToDraw(board *minesweeper.Board) *matrigo.Matrix {
 	// prepare matrix
-	var tiles []matrigo.Tile
+	var tiles []*matrigo.Tile
 	for x, tile := range board.Tiles {
 		for y, t := range tile {
-			tiles = append(tiles, matrigo.Tile{
+			tiles = append(tiles, &matrigo.Tile{
 				ImageID: string(tileImages[t]),
 				PosX:    int32(x),
 				PosY:    int32(y),
@@ -100,7 +109,7 @@ func (ui *UI) getGameToDraw(board *minesweeper.Board) *matrigo.Matrix {
 		}
 	}
 	matrix := &matrigo.Matrix{
-		Tiles: &tiles,
+		Tiles: tiles,
 	}
 	return matrix
 }
@@ -117,5 +126,8 @@ func getImagesToCache() *map[string]string {
 	ret["button_easy"] = getAbsolutePath("../assets/images/buttons/easy.png")
 	ret["button_medium"] = getAbsolutePath("../assets/images/buttons/medium.png")
 	ret["button_hard"] = getAbsolutePath("../assets/images/buttons/hard.png")
+	ret["button_win"] = getAbsolutePath("../assets/images/buttons/win.png")
+	ret["button_new"] = getAbsolutePath("../assets/images/buttons/new_game.png")
+	ret["button_quit"] = getAbsolutePath("../assets/images/buttons/quit.png")
 	return &ret
 }
